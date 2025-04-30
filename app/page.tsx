@@ -133,7 +133,8 @@ export default function HomePage() {
         <div className="max-w-full md:max-w-lg mx-auto space-y-6">
           {/* 示例博文 1 */}
           <div className="flex items-baseline">
-            <span className="text-sm text-gray-500 flex-shrink-0">2025-04-15</span>
+            {/* Add fixed width (e.g., w-20) and keep flex-shrink-0 */}
+            <span className="text-sm text-gray-500 flex-shrink-0 w-24">2025-04-15</span>
             {/* Reduce margin for smaller screens */}
             <a href="https://zhuanlan.zhihu.com/p/1893366157634928815" target="_blank" className="text-lg md:text-xl font-semibold text-black-700 hover:underline ml-2 mr-2 md:ml-4 md:mr-4">
               大模型的“神经科学”基础
@@ -141,22 +142,24 @@ export default function HomePage() {
           </div>
           {/* 示例博文 2 */}
           <div className="flex items-baseline">
-            <span className="text-sm text-gray-500 flex-shrink-0">2025-03-09</span>
+            {/* Add fixed width (e.g., w-20) and keep flex-shrink-0 */}
+            <span className="text-sm text-gray-500 flex-shrink-0 w-24">2025-03-09</span>
             <a href="https://zhuanlan.zhihu.com/p/28938402698" target="_blank" className="text-lg md:text-xl font-semibold text-black-700 hover:underline ml-2 mr-2 md:ml-4 md:mr-4">
               AI如何在两年内接管世界
             </a>
           </div>
           {/* 示例博文 3 */}
           <div className="flex items-baseline">
-            <span className="text-sm text-gray-500 flex-shrink-0">2025-04-04</span>
+            {/* Add fixed width (e.g., w-20) and keep flex-shrink-0 */}
+            <span className="text-sm text-gray-500 flex-shrink-0 w-24">2025-04-04</span>
             <a href="https://zhuanlan.zhihu.com/p/8372533549" target="_blank" className="text-lg md:text-xl font-semibold text-black-700 hover:underline ml-2 mr-2 md:ml-4 md:mr-4">
               AI Safety资源汇总
             </a>
           </div>
           {/* 示例博文 4 */}
           <div className="flex items-baseline">
-            {/* Add flex-shrink-0 to prevent date from shrinking/wrapping */}
-            <span className="text-sm text-gray-500 flex-shrink-0">2025-01-11</span>
+            {/* Add fixed width (e.g., w-20) and keep flex-shrink-0 */}
+            <span className="text-sm text-gray-500 flex-shrink-0 w-24">2025-01-11</span>
             <a href="https://zhuanlan.zhihu.com/p/17750373522" target="_blank" className="text-lg md:text-xl font-semibold text-black-700 hover:underline ml-2 mr-2 md:ml-4 md:mr-4">
               AI日益增强的自我意识（self-awareness）
             </a>
