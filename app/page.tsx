@@ -196,6 +196,14 @@ export default function HomePage() {
             <Youtube className="h-8 w-8" />
             <span className="text-sm">Bilibili</span>
           </a>
+          <a href="https://www.linkedin.com/company/aisafetystudy" target="_blank" className='flex flex-col items-center'>
+            <Linkedin className='h-8 w-8' />
+            <span className='text-sm'>LinkedIn</span>
+          </a>
+          <a href="https://github.com/jingedawang/aisafetystudy" target="_blank" className='flex flex-col items-center'>
+            <Github className='h-8 w-8' />
+            <span className='text-sm'>GitHub</span>
+          </a>
         </div>
       </section>
 
