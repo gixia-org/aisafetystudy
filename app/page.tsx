@@ -43,8 +43,8 @@ export default function HomePage() {
         </div>
         {/* Adjust spacing for nav items */}
         <nav className="flex space-x-4 md:space-x-6">
-          {['课程', '博客', '关于我们'].map((item, index) => {
-            const sectionIds = ['course', 'blog', 'about'];
+          {['活动', '博客', '关于我们'].map((item, index) => {
+            const sectionIds = ['event', 'blog', 'about'];
             return (
               <a
                 key={item}
@@ -72,7 +72,7 @@ export default function HomePage() {
         </h2>
         {/* Adjust text size and max-width */}
         <p className="max-w-md md:max-w-xl text-base md:text-lg mb-8">
-          关注AI对齐、伦理、评估、治理、可解释性等前沿话题，促进AI的安全可持续发展。
+          关注AI对齐、伦理、评估、治理、可解释性、隐私、攻防等前沿话题，促进AI的安全可持续发展。
         </p>
         {/* Modify this anchor tag */}
         <a
@@ -86,10 +86,10 @@ export default function HomePage() {
         </a>
       </section>
 
-      {/* Courses Section */}
+      {/* Events Section */}
       {/* Adjust padding significantly for smaller screens, keep large padding for larger screens */}
-      <section id="course" className="px-4 md:px-16 lg:px-64 py-16 bg-white">
-        <h3 className="text-3xl font-semibold text-center mb-12">课程</h3>
+      <section id="event" className="px-4 md:px-16 lg:px-64 py-16 bg-white">
+        <h3 className="text-3xl font-semibold text-center mb-12">活动</h3>
         {/* Default to 1 column, switch to 3 columns on medium screens and up */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Card 1 */}
