@@ -93,35 +93,39 @@ export default function HomePage() {
         {/* Default to 1 column, switch to 3 columns on medium screens and up */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Card 1 */}
-          <Card className="p-4">
-            <CardHeader>
-              <BookOpen className="h-8 w-8 text-blue-600" />
-              <CardTitle>研讨会</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>参与深度研讨会，与专家互动。</CardDescription>
-            </CardContent>
-          </Card>
+          <a href="https://github.com/gixia-org/aisafetystudy-doc" className="block" target="_blank">
+            <Card className="p-4 h-full transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+              <CardHeader>
+                <BookOpen className="h-8 w-8 text-blue-600" />
+                <CardTitle>研讨会</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>参与深度研讨会，发表自己的观点</CardDescription>
+              </CardContent>
+            </Card>
+          </a>
           {/* Card 2 */}
-          <Card className="p-4">
+          <Card className="p-4 h-full">
             <CardHeader>
               <Video className="h-8 w-8 text-blue-600" />
               <CardTitle>讲座</CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription>聆听主题讲座，拓展视野。</CardDescription>
+              <CardDescription>前沿或科普的主题讲座</CardDescription>
             </CardContent>
           </Card>
           {/* Card 3 */}
-          <Card className="p-4">
-            <CardHeader>
-              <GitPullRequest className="h-8 w-8 text-blue-600" />
-              <CardTitle>系列课程</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>系统学习系列课程，循序渐进。</CardDescription>
-            </CardContent>
-          </Card>
+          <a href="https://github.com/gixia-org/aisafetystudy-doc" className="block" target="_blank">
+            <Card className="p-4 h-full transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+              <CardHeader>
+                <GitPullRequest className="h-8 w-8 text-blue-600" />
+                <CardTitle>共学课程</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>与其它成员共同学习一门课程</CardDescription>
+              </CardContent>
+            </Card>
+          </a>
         </div>
       </section>
 
@@ -200,7 +204,7 @@ export default function HomePage() {
             <Linkedin className='h-8 w-8' />
             <span className='text-sm'>LinkedIn</span>
           </a>
-          <a href="https://github.com/jingedawang/aisafetystudy" target="_blank" className='flex flex-col items-center'>
+          <a href="https://github.com/gixia-org/aisafetystudy-doc" target="_blank" className='flex flex-col items-center'>
             <Github className='h-8 w-8' />
             <span className='text-sm'>GitHub</span>
           </a>
