@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { BookOpen, Video, GitPullRequest, Github, Linkedin, MessageSquare, Bookmark, Youtube } from 'lucide-react';
+import { BookOpen, Video, GitPullRequest, Github, Linkedin, MessageCircleMore, Bookmark, Youtube, Target } from 'lucide-react';
 
 export default function HomePage() {
   const [showQRCode, setShowQRCode] = useState(false);
@@ -182,7 +182,7 @@ export default function HomePage() {
         {/* Adjust spacing for icons */}
         <div className="flex justify-center space-x-6 md:space-x-8">
           <div className="relative flex flex-col items-center cursor-pointer" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <MessageSquare className="h-8 w-8" />
+            <MessageCircleMore className="h-8 w-8" />
             <span className="text-sm">微信</span>
             {showQRCode && (
               // Adjust QR code popup position and size for mobile if needed
@@ -195,6 +195,10 @@ export default function HomePage() {
           <a href="https://www.zhihu.com/people/wang-jin-ge-67" target="_blank" className="flex flex-col items-center">
             <Bookmark className="h-8 w-8" />
             <span className="text-sm">知乎</span>
+          </a>
+          <a href="https://www.zhihu.com/ring/host/1911472389268676936" target="_blank" className="flex flex-col items-center">
+            <Target className="h-8 w-8" />
+            <span className="text-sm">圈子</span>
           </a>
           <a href="https://space.bilibili.com/69217382" target="_blank" className="flex flex-col items-center">
             <Youtube className="h-8 w-8" />
