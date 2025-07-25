@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { BookOpen, Video, GitPullRequest, Github, Linkedin, MessageCircleMore, Bookmark, Youtube, Target } from 'lucide-react';
+import { BookOpen, Video, GitPullRequest, Github, Linkedin, MessageCircleMore, Bookmark, Youtube, Target, Mail } from 'lucide-react';
 
 export default function HomePage() {
   const [showQRCode, setShowQRCode] = useState(false);
@@ -181,6 +181,10 @@ export default function HomePage() {
         </p>
         {/* Adjust spacing for icons */}
         <div className="flex justify-center space-x-6 md:space-x-8">
+          <a href="mailto:wjg172184@163.com" className="flex flex-col items-center">
+            <Mail className="h-8 w-8" />
+            <span className="text-sm">邮箱</span>
+          </a>
           <div className="relative flex flex-col items-center cursor-pointer" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <MessageCircleMore className="h-8 w-8" />
             <span className="text-sm">微信</span>
