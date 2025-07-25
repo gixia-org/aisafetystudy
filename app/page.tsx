@@ -31,36 +31,37 @@ export default function HomePage() {
     // Add overflow-x-hidden to the main container to prevent horizontal scroll
     <div className="min-h-screen bg-beige-50 text-gray-900 overflow-x-hidden">
       {/* Header */}
-      {/* Adjust padding for smaller screens (px-4), keep logo fixed size, hide title on small screens */}
-      <header className="flex items-center justify-between px-4 md:px-8 py-4 bg-white shadow-lg fixed w-full z-10">
-        <div className="flex items-center space-x-2">
-          {/* Ensure logo container stays square */}
-          <div className="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
-            <BookOpen className="text-white" />
+      <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 px-4 md:px-8 py-4">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            {/* Replace the book icon and text with logo image */}
+            <img
+              src="/logo.png"
+              alt="AI Safety Study Group"
+              className="h-10 w-auto object-contain"
+            />
           </div>
-          {/* Hide title on small screens, show on medium and up */}
-          <h1 className="text-xl md:text-2xl font-bold text-blue-900 hidden sm:block">AI Safety Study Group</h1>
+          {/* Adjust spacing for nav items */}
+          <nav className="flex space-x-4 md:space-x-6">
+            {['活动', '博客', '关于我们'].map((item, index) => {
+              const sectionIds = ['event', 'blog', 'about'];
+              return (
+                <a
+                  key={item}
+                  href={`#${sectionIds[index]}`}
+                  // Adjust text size for smaller screens
+                  className="text-base md:text-lg hover:text-blue-600 flex-shrink-0"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(sectionIds[index]);
+                  }}
+                >
+                  {item}
+                </a>
+              );
+            })}
+          </nav>
         </div>
-        {/* Adjust spacing for nav items */}
-        <nav className="flex space-x-4 md:space-x-6">
-          {['活动', '博客', '关于我们'].map((item, index) => {
-            const sectionIds = ['event', 'blog', 'about'];
-            return (
-              <a
-                key={item}
-                href={`#${sectionIds[index]}`}
-                // Adjust text size for smaller screens
-                className="text-base md:text-lg hover:text-blue-600 flex-shrink-0"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(sectionIds[index]);
-                }}
-              >
-                {item}
-              </a>
-            );
-          })}
-        </nav>
       </header>
 
       {/* Hero Section */}
