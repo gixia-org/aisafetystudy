@@ -218,6 +218,21 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Partners Section */}
+      <section className="px-4 md:px-8 py-12 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-2xl md:text-3xl font-semibold text-center mb-8">合作伙伴</h3>
+          <div className="flex justify-center items-center gap-12 md:gap-16">
+            <a href="https://according.work/" target="_blank" className="group">
+              <img src="/accordingwork-logo.png" alt="According.Work" className="h-12 md:h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
+            </a>
+            <a href="https://www.tup.tsinghua.edu.cn/" target="_blank" className="group">
+              <img src="/tup-logo.png" alt="清华大学出版社" className="h-12 md:h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       {/* Adjust padding and text size */}
       <footer className="bg-gray-100 py-6 md:py-8 px-4 md:px-8 mt-16">
