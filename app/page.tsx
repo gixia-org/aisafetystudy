@@ -180,7 +180,7 @@ export default function HomePage() {
           AI Safety Study Group 是一个面向大众的学习小组，我们欢迎对AI和AI安全感兴趣的朋友加入。无论你的背景如何，都可以在这里学习AI知识，准备应对未来的社会变革。欢迎通过以下方式加入社区或浏览最新动态。
         </p>
         {/* Adjust spacing for icons */}
-        <div className="flex justify-center space-x-6 md:space-x-8">
+        <div className="flex justify-center gap-x-6 md:gap-x-8">
           <a href="mailto:wjg172184@163.com" className="flex flex-col items-center">
             <Mail className="h-8 w-8" />
             <span className="text-sm">邮箱</span>
@@ -189,10 +189,9 @@ export default function HomePage() {
             <MessageCircleMore className="h-8 w-8" />
             <span className="text-sm">微信</span>
             {showQRCode && (
-              // Adjust QR code popup position and size for mobile if needed
               <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-white p-4 rounded-lg shadow-lg text-center w-48 md:w-64">
-                <img src="/qrcode.jpg" alt="QR Code" className="mb-2 w-full h-auto" /> {/* Adjust image size */}
-                <span>扫码加入微信群</span> {/* Optional: Add text */}
+                <img src="/qrcode.jpg" alt="QR Code" className="mb-2 w-full h-auto" />
+                <span>扫码加入微信群</span>
               </div>
             )}
           </div>
@@ -208,13 +207,13 @@ export default function HomePage() {
             <Youtube className="h-8 w-8" />
             <span className="text-sm">Bilibili</span>
           </a>
-          <a href="https://www.linkedin.com/company/aisafetystudy" target="_blank" className='flex flex-col items-center'>
-            <Linkedin className='h-8 w-8' />
-            <span className='text-sm'>LinkedIn</span>
+          <a href="https://www.linkedin.com/company/aisafetystudy" target="_blank" className="flex flex-col items-center">
+            <Linkedin className="h-8 w-8" />
+            <span className="text-sm">LinkedIn</span>
           </a>
-          <a href="https://github.com/gixia-org/aisafetystudy-doc" target="_blank" className='flex flex-col items-center'>
-            <Github className='h-8 w-8' />
-            <span className='text-sm'>GitHub</span>
+          <a href="https://github.com/gixia-org/aisafetystudy-doc" target="_blank" className="flex flex-col items-center">
+            <Github className="h-8 w-8" />
+            <span className="text-sm">GitHub</span>
           </a>
         </div>
       </section>
