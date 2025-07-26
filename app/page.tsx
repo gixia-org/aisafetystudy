@@ -196,7 +196,7 @@ export default function HomePage() {
               </div>
             )}
           </div>
-          <a href="https://www.zhihu.com/people/wang-jin-ge-67" target="_blank" className="flex flex-col items-center">
+          <a href="https://www.zhihu.com/people/jingewang" target="_blank" className="flex flex-col items-center">
             <Bookmark className="h-8 w-8" />
             <span className="text-sm">知乎</span>
           </a>
