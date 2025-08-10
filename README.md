@@ -4,12 +4,52 @@ AI Safety Study Group is a group of learners interested in AI Safety. We aim to 
 
 ### Build & Deploy
 
-Currently it's a small project and directly running on Azure machine. Run following to build and start the web app:
+Currently it's a small project and directly running on Azure machine. 
+
+#### Option 1: Direct deployment (single app)
+Run following to build and start the web app:
 ```
 npm run build
 pm2 start npm --name "aisafetystudy" -- run start
 # Or restart if already running
 # pm2 restart aisafetystudy
+```
+
+#### Option 2: Multi-app deployment with nginx
+For multiple apps with different subdomains:
+```bash
+# Build and start this app on port 3000
+npm run build
+PORT=3000 pm2 start npm --name "aisafetystudy" -- run start
+```
+
+#### Nginx Configuration
+Create `/etc/nginx/sites-available/react-apps`:
+```nginx
+# AI Safety Study Group - aisafetystudy.gixia.org
+server {
+    listen 80;
+    server_name aisafetystudy.gixia.org;
+    
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+Enable the configuration:
+```bash
+sudo ln -s /etc/nginx/sites-available/react-apps /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
 ```
 
 ### Contributing
