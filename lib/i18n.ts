@@ -4,7 +4,7 @@ export interface Translations {
   // Navigation
   nav: {
     events: string;
-    blog: string;
+    resources: string;
     about: string;
   };
 
@@ -60,14 +60,39 @@ export interface Translations {
     comingSoon: string;
   };
 
-  // Blog Section
-  blog: {
+  // Resources Section
+  resources: {
     title: string;
-    posts: Array<{
-      date: string;
-      title: string;
-      url: string;
-    }>;
+    description: string;
+    categories: {
+      courses: {
+        title: string;
+        description: string;
+        items: Array<{
+          name: string;
+          description: string;
+          url: string;
+        }>;
+      };
+      bloggers: {
+        title: string;
+        description: string;
+        items: Array<{
+          name: string;
+          description: string;
+          url: string;
+        }>;
+      };
+      projects: {
+        title: string;
+        description: string;
+        items: Array<{
+          name: string;
+          description: string;
+          url: string;
+        }>;
+      };
+    };
   };
 
   // About Section
@@ -101,7 +126,7 @@ export const translations: Record<Language, Translations> = {
   zh: {
     nav: {
       events: '活动',
-      blog: '博客',
+      resources: '资源',
       about: '关于我们',
     },
     hero: {
@@ -195,30 +220,74 @@ export const translations: Record<Language, Translations> = {
       registerNow: '立即报名',
       comingSoon: '敬请期待',
     },
-    blog: {
-      title: '博客',
-      posts: [
-        {
-          date: '2025-04-15',
-          title: '大模型的"神经科学"基础',
-          url: 'https://zhuanlan.zhihu.com/p/1893366157634928815',
+    resources: {
+      title: '资源',
+      description: '精心整理的AI安全学习资源，帮助您深入了解人工智能安全知识',
+      categories: {
+        courses: {
+          title: '课程网站',
+          description: '优质的AI安全在线学习平台',
+          items: [
+            {
+              name: 'BlueDot',
+              description: '专业的AI安全教育平台，提供系统性的课程内容',
+              url: 'https://bluedot.org/'
+            },
+            {
+              name: 'ML4Good',
+              description: '致力于将机器学习应用于社会公益的教育机构',
+              url: 'https://www.ml4good.org/'
+            },
+            {
+              name: 'ARENA',
+              description: 'AI对齐研究工程师加速器，提供实践性训练',
+              url: 'https://www.arena.education/'
+            }
+          ]
         },
-        {
-          date: '2025-03-09',
-          title: 'AI如何在两年内接管世界',
-          url: 'https://zhuanlan.zhihu.com/p/28938402698',
+        bloggers: {
+          title: '博主推荐',
+          description: 'AI安全领域知名博主和意见领袖',
+          items: [
+            {
+              name: '飞秒光年',
+              description: 'AI安全研究者，深度分析AI发展趋势和风险',
+              url: 'https://www.zhihu.com/people/femtosec-light-years'
+            },
+            {
+              name: '王巍',
+              description: 'AI技术专家，专注于人工智能的安全性和可控性',
+              url: 'https://www.zhihu.com/people/ai-wwang'
+            },
+            {
+              name: '时间旅客',
+              description: '科技观察者，关注AI对社会的长远影响',
+              url: 'https://www.zhihu.com/people/time-passenger'
+            },
+            {
+              name: '王金戈',
+              description: 'AI安全学习小组创始人，推动AI安全教育普及',
+              url: 'https://www.zhihu.com/people/jingewang'
+            }
+          ]
         },
-        {
-          date: '2025-04-04',
-          title: 'AI Safety资源汇总',
-          url: 'https://zhuanlan.zhihu.com/p/8372533549',
-        },
-        {
-          date: '2025-01-11',
-          title: 'AI日益增强的自我意识（self-awareness）',
-          url: 'https://zhuanlan.zhihu.com/p/17750373522',
-        },
-      ],
+        projects: {
+          title: '研究项目',
+          description: '重要的AI安全研究机构和项目',
+          items: [
+            {
+              name: 'SPAR',
+              description: 'AI对齐研究监督项目，为有志于AI安全研究的人员提供导师指导',
+              url: 'https://sparai.org/'
+            },
+            {
+              name: 'MATS',
+              description: '机器学习对齐与理论学者项目，培养AI安全研究人才',
+              url: 'https://www.matsprogram.org/'
+            }
+          ]
+        }
+      }
     },
     about: {
       title: '关于我们',
@@ -244,7 +313,7 @@ export const translations: Record<Language, Translations> = {
   en: {
     nav: {
       events: 'Events',
-      blog: 'Blog',
+      resources: 'Resources',
       about: 'About',
     },
     hero: {
@@ -338,30 +407,74 @@ export const translations: Record<Language, Translations> = {
       registerNow: 'Register Now',
       comingSoon: 'Coming Soon',
     },
-    blog: {
-      title: 'Blog',
-      posts: [
-        {
-          date: '2025-04-15',
-          title: 'The "Neuroscience" Foundation of Large Language Models',
-          url: 'https://zhuanlan.zhihu.com/p/1893366157634928815',
+    resources: {
+      title: 'Resources',
+      description: 'Carefully curated AI safety learning resources to help you deepen your understanding of artificial intelligence safety',
+      categories: {
+        courses: {
+          title: 'Course Websites',
+          description: 'High-quality online AI safety learning platforms',
+          items: [
+            {
+              name: 'BlueDot',
+              description: 'Professional AI safety education platform with systematic course content',
+              url: 'https://bluedot.org/'
+            },
+            {
+              name: 'ML4Good',
+              description: 'Educational institution dedicated to applying machine learning for social good',
+              url: 'https://www.ml4good.org/'
+            },
+            {
+              name: 'ARENA',
+              description: 'AI alignment research engineer accelerator with practical training',
+              url: 'https://www.arena.education/'
+            }
+          ]
         },
-        {
-          date: '2025-03-09',
-          title: 'How AI Takeover Might Happen in 2 Years',
-          url: 'https://zhuanlan.zhihu.com/p/28938402698',
+        bloggers: {
+          title: 'Recommended Bloggers',
+          description: 'Renowned bloggers and thought leaders in AI safety',
+          items: [
+            {
+              name: '飞秒光年 (Femtosec Light Years)',
+              description: 'AI safety researcher with in-depth analysis of AI trends and risks',
+              url: 'https://www.zhihu.com/people/femtosec-light-years'
+            },
+            {
+              name: '王巍 (Wang Wei)',
+              description: 'AI technology expert focused on AI safety and controllability',
+              url: 'https://www.zhihu.com/people/ai-wwang'
+            },
+            {
+              name: '时间旅客 (Time Passenger)',
+              description: 'Tech observer focused on long-term impacts of AI on society',
+              url: 'https://www.zhihu.com/people/time-passenger'
+            },
+            {
+              name: '王金戈 (Wang Jinge)',
+              description: 'Founder of AI Safety Study Group, promoting AI safety education',
+              url: 'https://www.zhihu.com/people/jingewang'
+            }
+          ]
         },
-        {
-          date: '2025-04-04',
-          title: 'AI Safety Resources Collection',
-          url: 'https://zhuanlan.zhihu.com/p/8372533549',
-        },
-        {
-          date: '2025-01-11',
-          title: 'AI\'s Increasing Self-Awareness',
-          url: 'https://zhuanlan.zhihu.com/p/17750373522',
-        },
-      ],
+        projects: {
+          title: 'Research Projects',
+          description: 'Important AI safety research institutions and projects',
+          items: [
+            {
+              name: 'SPAR',
+              description: 'Supervised Program for Alignment Research - a remote research program pairing aspiring AI safety researchers with mentors',
+              url: 'https://sparai.org/'
+            },
+            {
+              name: 'MATS',
+              description: 'Machine Learning Alignment & Theory Scholars, training AI safety researchers',
+              url: 'https://www.matsprogram.org/'
+            }
+          ]
+        }
+      }
     },
     about: {
       title: 'About Us',

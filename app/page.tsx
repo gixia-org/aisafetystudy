@@ -7,6 +7,7 @@ import { BookOpen, Video, GitPullRequest, Github, Linkedin, MessageCircleMore, B
 import { useLanguage } from '@/lib/language-context';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { EventCard } from '@/components/event-card';
+import { ResourceCard } from '@/components/resource-card';
 import { useEvents } from '@/lib/use-events';
 
 export default function HomePage() {
@@ -51,8 +52,8 @@ export default function HomePage() {
           </div>
           {/* Adjust spacing for nav items */}
           <nav className="flex items-center space-x-4 md:space-x-6">
-            {[t.nav.events, t.nav.blog, t.nav.about].map((item, index) => {
-              const sectionIds = ['event', 'blog', 'about'];
+            {[t.nav.events, t.nav.resources, t.nav.about].map((item, index) => {
+              const sectionIds = ['event', 'resources', 'about'];
               return (
                 <a
                   key={item}
@@ -106,8 +107,8 @@ export default function HomePage() {
             <button
               onClick={() => setSelectedEventType('all')}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'all'
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
                 }`}
             >
               {t.events.allTypes}
@@ -115,8 +116,8 @@ export default function HomePage() {
             <button
               onClick={() => setSelectedEventType('seminar')}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'seminar'
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
                 }`}
             >
               {t.events.eventTypes.seminar.title}
@@ -124,8 +125,8 @@ export default function HomePage() {
             <button
               onClick={() => setSelectedEventType('lecture')}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'lecture'
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
                 }`}
             >
               {t.events.eventTypes.lecture.title}
@@ -133,8 +134,8 @@ export default function HomePage() {
             <button
               onClick={() => setSelectedEventType('course')}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'course'
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
                 }`}
             >
               {t.events.eventTypes.course.title}
@@ -244,22 +245,61 @@ export default function HomePage() {
         })()}
       </section>
 
-      {/* Blog Section */}
-      {/* Adjust padding for smaller screens */}
-      <section id="blog" className="px-4 md:px-8 py-16 bg-gray-50">
-        <h3 className="text-3xl font-semibold text-center mb-12">{t.blog.title}</h3>
-        {/* Adjust max-width for better mobile view */}
-        <div className="max-w-full md:max-w-lg mx-auto space-y-6">
-          {t.blog.posts.map((post, index) => (
-            <div key={index} className="flex items-baseline">
-              {/* Add fixed width (e.g., w-20) and keep flex-shrink-0 */}
-              <span className="text-sm text-gray-500 flex-shrink-0 w-24">{post.date}</span>
-              {/* Reduce margin for smaller screens */}
-              <a href={post.url} target="_blank" className="text-lg md:text-xl font-semibold text-black-700 hover:underline ml-2 mr-2 md:ml-4 md:mr-4">
-                {post.title}
-              </a>
+      {/* Resources Section */}
+      <section id="resources" className="px-4 md:px-8 py-16 bg-gray-50">
+        <h3 className="text-3xl font-semibold text-center mb-4">{t.resources.title}</h3>
+        <p className="text-center text-gray-600 mb-16 max-w-3xl mx-auto text-lg">
+          {t.resources.description}
+        </p>
+
+        <div className="max-w-7xl mx-auto space-y-20">
+          {/* Course Websites */}
+          <div>
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-4">
+                <BookOpen className="h-6 w-6 text-blue-600" />
+              </div>
+              <h4 className="text-2xl font-bold mb-3 text-blue-700">{t.resources.categories.courses.title}</h4>
+              <p className="text-gray-600 max-w-2xl mx-auto">{t.resources.categories.courses.description}</p>
             </div>
-          ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {t.resources.categories.courses.items.map((item, index) => (
+                <ResourceCard key={`course-${index}`} item={item} colorTheme="blue" />
+              ))}
+            </div>
+          </div>
+
+          {/* Bloggers */}
+          <div>
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-4">
+                <Bookmark className="h-6 w-6 text-green-600" />
+              </div>
+              <h4 className="text-2xl font-bold mb-3 text-green-700">{t.resources.categories.bloggers.title}</h4>
+              <p className="text-gray-600 max-w-2xl mx-auto">{t.resources.categories.bloggers.description}</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {t.resources.categories.bloggers.items.map((item, index) => (
+                <ResourceCard key={`blogger-${index}`} item={item} colorTheme="green" />
+              ))}
+            </div>
+          </div>
+
+          {/* Research Projects */}
+          <div>
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full mb-4">
+                <Target className="h-6 w-6 text-purple-600" />
+              </div>
+              <h4 className="text-2xl font-bold mb-3 text-purple-700">{t.resources.categories.projects.title}</h4>
+              <p className="text-gray-600 max-w-2xl mx-auto">{t.resources.categories.projects.description}</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {t.resources.categories.projects.items.map((item, index) => (
+                <ResourceCard key={`project-${index}`} item={item} colorTheme="purple" />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
