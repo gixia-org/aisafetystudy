@@ -3,10 +3,11 @@
 ## 项目概述
 
 **项目名称**: AI Safety Study Group (AI安全学习小组)  
-**版本**: 0.1.0  
+**版本**: 0.2.0  
 **项目类型**: Next.js 15 单页面应用  
 **语言**: TypeScript + React 19  
-**目标**: 为AI安全学习小组提供官方网站，展示活动、博客和联系信息
+**目标**: 为AI安全学习小组提供官方网站，展示活动、博客和联系信息  
+**国际化**: 支持中文和英文双语切换
 
 ## 技术栈
 
@@ -26,6 +27,11 @@
 - **clsx**: 2.1.1 (类名合并)
 - **tailwind-merge**: 3.2.0 (Tailwind 类名合并)
 
+### 国际化支持
+- **多语言**: 中文（zh）和英文（en）
+- **语言切换**: 实时切换，支持本地存储
+- **翻译管理**: 集中式翻译文件管理
+
 ## 项目结构
 
 ```
@@ -33,14 +39,17 @@ aisafetystudy/
 ├── app/                    # Next.js App Router
 │   ├── favicon.ico
 │   ├── globals.css        # 全局样式配置
-│   ├── layout.tsx         # 根布局组件
-│   └── page.tsx           # 主页面组件
+│   ├── layout.tsx         # 根布局组件（包含语言提供者）
+│   └── page.tsx           # 主页面组件（支持多语言）
 ├── components/
-│   └── ui/                # shadcn/ui 组件
-│       ├── button.tsx     # 按钮组件
-│       └── card.tsx       # 卡片组件
+│   ├── ui/                # shadcn/ui 组件
+│   │   ├── button.tsx     # 按钮组件
+│   │   └── card.tsx       # 卡片组件
+│   └── language-switcher.tsx  # 语言切换组件
 ├── lib/
-│   └── utils.ts           # 工具函数
+│   ├── utils.ts           # 工具函数
+│   ├── i18n.ts            # 国际化翻译文件
+│   └── language-context.tsx # 语言上下文提供者
 ├── public/                # 静态资源
 │   ├── logo.png           # 主logo
 │   ├── qrcode.jpg         # 微信群二维码
@@ -64,14 +73,21 @@ aisafetystudy/
 - **页脚**: 版权信息
 
 ### 2. 导航系统
-- **固定顶部导航栏**: 包含logo和导航链接
+- **固定顶部导航栏**: 包含logo、导航链接和语言切换按钮
 - **平滑滚动**: 点击导航链接实现页面内平滑滚动
 - **响应式设计**: 适配移动端和桌面端
+- **语言切换**: 支持中英文实时切换，语言偏好本地存储
 
 ### 3. 交互功能
 - **微信二维码**: 鼠标悬停显示微信群二维码
 - **卡片悬停效果**: 活动卡片的缩放和阴影效果
 - **外部链接**: 多个社交媒体和资源链接
+
+### 4. 国际化功能
+- **多语言支持**: 完整的中英文翻译
+- **语言切换组件**: 导航栏中的语言切换按钮
+- **语言上下文**: React Context 管理语言状态
+- **本地存储**: 用户语言偏好持久化
 
 ## UI 组件系统
 
@@ -89,16 +105,56 @@ aisafetystudy/
 ## 内容管理
 
 ### 静态内容
-- **活动信息**: 硬编码在组件中，包含三种活动类型
-- **博客文章**: 硬编码链接到知乎文章
+- **活动信息**: 通过翻译文件管理，包含三种活动类型
+- **博客文章**: 通过翻译文件管理，链接到知乎文章
 - **联系方式**: 邮箱、微信、知乎、圈子、Bilibili、LinkedIn、GitHub
 - **合作伙伴**: According.Work 和清华大学出版社
+
+### 国际化内容管理
+- **翻译文件**: `lib/i18n.ts` 集中管理所有翻译内容
+- **语言类型**: 支持中文（zh）和英文（en）
+- **内容覆盖**: 导航、Hero、活动、博客、关于我们、合作伙伴、页脚
+- **动态切换**: 实时语言切换，无需页面刷新
 
 ### 外部资源
 - **GitHub**: 文档仓库链接
 - **知乎**: 个人主页和圈子链接
 - **Bilibili**: 视频内容链接
 - **LinkedIn**: 公司页面链接
+
+## 国际化架构
+
+### 核心文件
+- **`lib/i18n.ts`**: 翻译文件，包含所有中英文翻译内容
+- **`lib/language-context.tsx`**: 语言上下文提供者，管理语言状态
+- **`components/language-switcher.tsx`**: 语言切换按钮组件
+
+### 翻译结构
+```typescript
+interface Translations {
+  nav: { events: string; blog: string; about: string; };
+  hero: { title: string; description: string; joinButton: string; };
+  events: { title: string; seminar: {...}; lecture: {...}; course: {...}; };
+  blog: { title: string; posts: Array<{date: string; title: string; url: string}>; };
+  about: { title: string; description: string; contact: {...}; qrCodeText: string; };
+  partners: { title: string; };
+  footer: { copyright: string; };
+}
+```
+
+### 语言管理
+- **支持语言**: 中文（zh）、英文（en）
+- **状态管理**: React Context + useState
+- **持久化**: localStorage 保存用户语言偏好
+- **默认语言**: 中文
+- **切换方式**: 导航栏语言切换按钮
+
+### 使用方式
+```typescript
+// 在组件中使用翻译
+const { t, language, setLanguage } = useLanguage();
+// t.nav.events, t.hero.title 等
+```
 
 ## 配置信息
 
@@ -157,16 +213,18 @@ npm run lint     # 代码检查
 ### 功能扩展
 - 可添加用户认证系统
 - 可集成 CMS 系统进行内容管理
-- 可添加多语言支持
+- ✅ **多语言支持**: 已实现中英文双语支持
 - 可添加搜索功能
+- 可添加更多语言支持（如日语、韩语等）
 
 ## 维护指南
 
 ### 更新内容
-1. **活动信息**: 修改 `app/page.tsx` 中的活动卡片
-2. **博客文章**: 更新博客 section 中的链接和日期
-3. **联系方式**: 修改关于我们 section 中的链接
-4. **合作伙伴**: 更新合作伙伴 section 中的 logo 和链接
+1. **活动信息**: 修改 `lib/i18n.ts` 中的翻译内容
+2. **博客文章**: 更新 `lib/i18n.ts` 中的博客文章信息
+3. **联系方式**: 修改 `lib/i18n.ts` 中的联系方式标签
+4. **合作伙伴**: 更新 `lib/i18n.ts` 中的合作伙伴信息
+5. **新增翻译**: 在 `lib/i18n.ts` 中添加新的翻译内容
 
 ### 样式更新
 1. **主题颜色**: 修改 `app/globals.css` 中的 CSS 变量
@@ -177,6 +235,8 @@ npm run lint     # 代码检查
 1. **新组件**: 在 `components/` 目录下创建
 2. **新页面**: 在 `app/` 目录下创建新路由
 3. **新样式**: 在 `globals.css` 中添加或使用 Tailwind
+4. **新语言**: 在 `lib/i18n.ts` 中添加新的语言支持
+5. **新翻译**: 在 `lib/i18n.ts` 中为现有语言添加新的翻译内容
 
 ## 注意事项
 
@@ -185,9 +245,12 @@ npm run lint     # 代码检查
 3. **可访问性**: 使用了语义化 HTML 和适当的 ARIA 属性
 4. **浏览器兼容**: 支持现代浏览器，IE 不支持
 5. **移动端适配**: 已实现响应式设计，支持移动端访问
+6. **国际化**: 语言切换使用本地存储，确保用户体验一致性
+7. **翻译维护**: 新增内容时需同时更新中英文翻译
 
 ## 版本历史
 
+- **v0.2.0**: 添加双语言支持（中文/英文），语言切换功能，国际化架构
 - **v0.1.0**: 初始版本，包含基础功能和页面结构
 
 ---
