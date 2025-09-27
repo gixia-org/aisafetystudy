@@ -3,13 +3,18 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { BookOpen, Video, GitPullRequest, Github, Linkedin, MessageCircleMore, Bookmark, Youtube, Target, Mail } from 'lucide-react';
+import { BookOpen, Video, GitPullRequest, Github, Linkedin, MessageCircleMore, Bookmark, Youtube, Target, Mail, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { EventCard } from '@/components/event-card';
+import { useEvents } from '@/lib/use-events';
 
 export default function HomePage() {
   const [showQRCode, setShowQRCode] = useState(false);
+  const [showAllEvents, setShowAllEvents] = useState(false);
+  const [selectedEventType, setSelectedEventType] = useState<'all' | 'seminar' | 'lecture' | 'course'>('all');
   const { t } = useLanguage();
+  const { events, loading, error, refresh } = useEvents();
 
   const handleMouseEnter = () => {
     setShowQRCode(true);
@@ -92,46 +97,151 @@ export default function HomePage() {
       </section>
 
       {/* Events Section */}
-      {/* Adjust padding significantly for smaller screens, keep large padding for larger screens */}
       <section id="event" className="px-4 md:px-16 lg:px-64 py-16 bg-white">
         <h3 className="text-3xl font-semibold text-center mb-12">{t.events.title}</h3>
-        {/* Default to 1 column, switch to 3 columns on medium screens and up */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Card 1 */}
-          <a href="https://github.com/gixia-org/aisafetystudy-doc" className="block" target="_blank">
-            <Card className="p-4 h-full transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-              <CardHeader>
-                <BookOpen className="h-8 w-8 text-blue-600" />
-                <CardTitle>{t.events.seminar.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>{t.events.seminar.description}</CardDescription>
-              </CardContent>
-            </Card>
-          </a>
-          {/* Card 2 */}
-          <Card className="p-4 h-full">
-            <CardHeader>
-              <Video className="h-8 w-8 text-blue-600" />
-              <CardTitle>{t.events.lecture.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>{t.events.lecture.description}</CardDescription>
-            </CardContent>
-          </Card>
-          {/* Card 3 */}
-          <a href="https://github.com/gixia-org/aisafetystudy-doc" className="block" target="_blank">
-            <Card className="p-4 h-full transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-              <CardHeader>
-                <GitPullRequest className="h-8 w-8 text-blue-600" />
-                <CardTitle>{t.events.course.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>{t.events.course.description}</CardDescription>
-              </CardContent>
-            </Card>
-          </a>
+
+        {/* Event Type Filter */}
+        <div className="flex justify-center mb-8">
+          <div className="flex gap-2 p-1 bg-gray-100 rounded-lg">
+            <button
+              onClick={() => setSelectedEventType('all')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'all'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+                }`}
+            >
+              {t.events.allTypes}
+            </button>
+            <button
+              onClick={() => setSelectedEventType('seminar')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'seminar'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+                }`}
+            >
+              {t.events.eventTypes.seminar.title}
+            </button>
+            <button
+              onClick={() => setSelectedEventType('lecture')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'lecture'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+                }`}
+            >
+              {t.events.eventTypes.lecture.title}
+            </button>
+            <button
+              onClick={() => setSelectedEventType('course')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'course'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+                }`}
+            >
+              {t.events.eventTypes.course.title}
+            </button>
+          </div>
         </div>
+
+        {/* Filter and display events */}
+        {(() => {
+          // 如果正在加载，显示加载状态
+          if (loading) {
+            return (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">正在从GitHub加载事件数据...</p>
+              </div>
+            );
+          }
+
+          // 如果加载出错，显示错误信息
+          if (error) {
+            return (
+              <div className="text-center py-12">
+                <p className="text-red-600 mb-4">加载事件数据失败: {error}</p>
+                <Button onClick={refresh} variant="outline">
+                  重试
+                </Button>
+              </div>
+            );
+          }
+
+          // 如果没有事件数据，显示空状态
+          if (!events || events.length === 0) {
+            return (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">暂无活动数据</p>
+                <Button onClick={refresh} variant="outline" className="mt-4">
+                  刷新数据
+                </Button>
+              </div>
+            );
+          }
+
+          // 过滤事件
+          const filteredEvents = events.filter(event =>
+            selectedEventType === 'all' || event.type === selectedEventType
+          );
+
+          // 默认显示前3个事件，如果选择显示全部则显示所有
+          const displayEvents = showAllEvents ? filteredEvents : filteredEvents.slice(0, 3);
+
+          return (
+            <>
+              {/* 事件列表 */}
+              {displayEvents.length > 0 && (
+                <div className="mb-12">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {displayEvents.map((event) => (
+                      <EventCard
+                        key={event.id}
+                        event={event}
+                        translations={{
+                          watchVideo: t.events.watchVideo,
+                          viewDocument: t.events.viewDocument,
+                          registerNow: t.events.registerNow,
+                          comingSoon: t.events.comingSoon,
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 显示更多/收起按钮 */}
+              {filteredEvents.length > 3 && (
+                <div className="text-center mb-8">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAllEvents(!showAllEvents)}
+                    className="flex items-center gap-2"
+                  >
+                    {showAllEvents ? (
+                      <>
+                        <ChevronUp className="h-4 w-4" />
+                        {t.events.collapse}
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="h-4 w-4" />
+                        {t.events.viewMore}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
+
+              {/* No events message */}
+              {filteredEvents.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 text-lg">
+                    {selectedEventType === 'all' ? t.events.noEvents : t.events.noEventsOfType.replace('{type}', t.events.eventTypes[selectedEventType].title)}
+                  </p>
+                </div>
+              )}
+            </>
+          );
+        })()}
       </section>
 
       {/* Blog Section */}

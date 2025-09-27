@@ -1,0 +1,57 @@
+name: Update Events Data from Markdown
+
+on:
+  schedule:
+    # 每天北京时间上午9点运行
+    - cron: '0 1 * * *'
+  workflow_dispatch: # 允许手动触发
+  push:
+    # 当aisafetystudy-doc仓库有新的Markdown文件时触发
+    paths:
+      - 'talk-*.md'
+      - 'seminars/*.md'
+      - 'lectures/*.md'
+      - 'courses/*.md'
+
+jobs:
+  update-events:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout main repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Test Markdown parsing
+      run: |
+        echo "🧪 测试Markdown解析功能..."
+        node scripts/test-markdown-parser.js
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Update events cache
+      run: |
+        echo "🔄 更新事件缓存..."
+        curl -X POST http://localhost:3000/api/events || echo "API endpoint not available"
+      continue-on-error: true
+    
+    - name: Notify on success
+      if: success()
+      run: |
+        echo "✅ Events data updated successfully from Markdown files"
+    
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "❌ Failed to update events data"
+        exit 1

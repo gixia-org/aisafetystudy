@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:github": "node scripts/test-github-connection.js",
+    "test:markdown": "node scripts/test-markdown-parser.js"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.0",
