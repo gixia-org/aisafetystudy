@@ -9,6 +9,7 @@ import { LanguageSwitcher } from '@/components/language-switcher';
 import { EventCard } from '@/components/event-card';
 import { ResourceCard } from '@/components/resource-card';
 import { useEvents } from '@/lib/use-events';
+import { NotificationBanner } from '@/components/notification-banner';
 
 export default function HomePage() {
   const [showQRCode, setShowQRCode] = useState(false);
@@ -40,8 +41,9 @@ export default function HomePage() {
     // Add overflow-x-hidden to the main container to prevent horizontal scroll
     <div className="min-h-screen bg-beige-50 text-gray-900 overflow-x-hidden">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 px-4 md:px-8 py-4">
-        <div className="flex justify-between items-center">
+      <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+        <NotificationBanner />
+        <div className="px-4 md:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             {/* Replace the book icon and text with logo image */}
             <img
