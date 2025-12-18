@@ -27,7 +27,7 @@ const GITHUB_CONFIG = {
 };
 
 // 从GitHub获取文件内容
-async function fetchGitHubFile(path: string): Promise<string | null> {
+async function fetchGitHubFile(path: string, signal?: AbortSignal): Promise<string | null> {
   try {
     const url = `${GITHUB_CONFIG.apiBase}/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}`;
 
@@ -40,37 +40,48 @@ async function fetchGitHubFile(path: string): Promise<string | null> {
       headers['Authorization'] = `token ${GITHUB_CONFIG.token}`;
     }
 
-    const response = await fetch(url, { headers });
+    try {
+      const response = await fetch(url, {
+        headers,
+        signal,
+      });
 
-    if (!response.ok) {
-      console.error(`Failed to fetch ${path}: ${response.status}`);
-      return null;
-    }
-
-    const data = await response.json();
-
-    // GitHub API返回base64编码的内容，正确解码UTF-8字符
-    if (data.content && data.encoding === 'base64') {
-      try {
-        // Node.js环境
-        if (typeof Buffer !== 'undefined') {
-          return Buffer.from(data.content, 'base64').toString('utf-8');
-        }
-
-        // 浏览器环境，使用TextDecoder解码UTF-8
-        const binaryString = atob(data.content);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        return new TextDecoder('utf-8').decode(bytes);
-      } catch (error) {
-        console.error('Error decoding base64 content:', error);
-        return atob(data.content);
+      if (!response.ok) {
+        console.error(`Failed to fetch ${path}: ${response.status}`);
+        return null;
       }
-    }
 
-    return null;
+      const data = await response.json();
+
+      // GitHub API返回base64编码的内容，正确解码UTF-8字符
+      if (data.content && data.encoding === 'base64') {
+        try {
+          // Node.js环境
+          if (typeof Buffer !== 'undefined') {
+            return Buffer.from(data.content, 'base64').toString('utf-8');
+          }
+
+          // 浏览器环境，使用TextDecoder解码UTF-8
+          const binaryString = atob(data.content);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          return new TextDecoder('utf-8').decode(bytes);
+        } catch (error) {
+          console.error('Error decoding base64 content:', error);
+          return atob(data.content);
+        }
+      }
+
+      return null;
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.error(`Aborted fetching ${path}`);
+        return null;
+      }
+      throw error;
+    }
   } catch (error) {
     console.error('Error fetching GitHub file:', error);
     return null;
@@ -291,8 +302,10 @@ function parseEventFromMarkdown(content: string, filePath: string): GitHubEventD
     console.error('Error parsing markdown:', error);
     return null;
   }
-}// 自动发现仓库中的事件文件
-async function discoverEventFiles(): Promise<string[]> {
+}
+
+// 自动发现仓库中的事件文件
+async function discoverEventFiles(signal?: AbortSignal): Promise<string[]> {
   try {
     const url = `${GITHUB_CONFIG.apiBase}/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents`;
 
@@ -304,7 +317,20 @@ async function discoverEventFiles(): Promise<string[]> {
       headers['Authorization'] = `token ${GITHUB_CONFIG.token}`;
     }
 
-    const response = await fetch(url, { headers });
+    let response;
+    try {
+    response = await fetch(url, {
+      headers,
+      signal,
+    });
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+      console.error('Aborted fetching repository contents');
+      } else {
+        console.error('Error fetching repository contents:', error);
+      }
+      return [];
+    }
 
     if (!response.ok) {
       console.error(`Failed to fetch repository contents: ${response.status}`);
@@ -332,11 +358,11 @@ async function discoverEventFiles(): Promise<string[]> {
   }
 }
 
-// 获取所有事件数据
-export async function fetchAllEvents(): Promise<GitHubEventData[]> {
+// 获取所有事件数据（支持外部传入 AbortSignal，实现全链路可取消）
+export async function fetchAllEvents(signal?: AbortSignal): Promise<GitHubEventData[]> {
   try {
     // 自动发现事件文件
-    const filePaths = await discoverEventFiles();
+    const filePaths = await discoverEventFiles(signal);
 
     if (filePaths.length === 0) {
       console.log('未发现任何事件文件，使用默认文件列表');
@@ -355,7 +381,7 @@ export async function fetchAllEvents(): Promise<GitHubEventData[]> {
 
     // 并行获取所有文件
     const promises = filePaths.map(async (filePath) => {
-      const content = await fetchGitHubFile(filePath);
+      const content = await fetchGitHubFile(filePath, signal);
       if (content) {
         const event = parseEventFromMarkdown(content, filePath);
         if (event) {
@@ -396,10 +422,10 @@ export async function fetchAllEvents(): Promise<GitHubEventData[]> {
   }
 }
 
-// 获取单个事件数据
-export async function fetchEventById(id: string): Promise<GitHubEventData | null> {
+// 获取单个事件数据（支持外部传入 AbortSignal）
+export async function fetchEventById(id: string, signal?: AbortSignal): Promise<GitHubEventData | null> {
   try {
-    const events = await fetchAllEvents();
+    const events = await fetchAllEvents(signal);
     return events.find(event => event.id === id) || null;
   } catch (error) {
     console.error('Error fetching event by ID:', error);
@@ -407,10 +433,10 @@ export async function fetchEventById(id: string): Promise<GitHubEventData | null
   }
 }
 
-// 刷新事件数据的函数（可以在GitHub Actions中使用）
-export async function refreshEventsData(): Promise<GitHubEventData[]> {
+// 刷新事件数据的函数（可以在GitHub Actions中使用，支持传入 AbortSignal）
+export async function refreshEventsData(signal?: AbortSignal): Promise<GitHubEventData[]> {
   console.log('Refreshing events data from GitHub...');
-  const events = await fetchAllEvents();
+  const events = await fetchAllEvents(signal);
   console.log(`Fetched ${events.length} events from GitHub`);
   return events;
 }
