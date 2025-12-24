@@ -55,20 +55,20 @@ server {
 }
 ```
 
-#### HTTPS configuration
-
-Use Certbot to automatically configure the website.
-```bash
-sudo apt update && sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d aisafetystudy.gixia.org
-```
-
 #### Enable Nginx server
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/react-apps /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
+```
+
+#### HTTPS configuration
+
+Use Certbot to automatically configure the website.
+```bash
+sudo apt update && sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d aisafetystudy.gixia.org
 ```
 
 Don't forget to enable HTTPS port in the network settings of the server.
