@@ -8,11 +8,13 @@ Install necessary dependencies.
 
 ```
 sudo apt update
-sudo apt install npm
-sudo apt install nginx
+sudo apt install nginx certbot python3-certbot-nginx unzip
+curl -o- https://fnm.vercel.app/install | bash
+source ~/.bashrc
+fnm install 24
 sudo npm install -g pm2
-sudo apt install certbot python3-certbot-nginx
 npm install
+npm audit fix --force   # If there are vulnerabilities
 ```
 
 Currently it's a small project and directly running on Azure machine.
