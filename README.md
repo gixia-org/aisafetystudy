@@ -11,6 +11,7 @@ sudo apt update
 sudo apt install npm
 sudo apt install nginx
 sudo npm install -g pm2
+sudo apt install certbot python3-certbot-nginx
 npm install
 ```
 
@@ -67,7 +68,6 @@ sudo systemctl reload nginx
 
 Use Certbot to automatically configure the website.
 ```bash
-sudo apt update && sudo apt install certbot python3-certbot-nginx
 sudo certbot --nginx -d aisafetystudy.gixia.org
 ```
 
