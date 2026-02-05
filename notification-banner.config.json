@@ -1,0 +1,8 @@
+{
+  "enabled": false,
+  "message": "<填写主文案>",
+  "detailUrl": "<填写详情链接>",
+  "detailText": "<填写详情文本>",
+  "ctaUrl": "<填写CTA链接>",
+  "ctaText": "<填写CTA文本>"
+}
