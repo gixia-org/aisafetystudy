@@ -17,7 +17,11 @@ export const metadata: Metadata = {
   title: "AI安全学习小组", // 保持你之前的修改
   description: "关注AI对齐、伦理、评估、治理、可解释性等前沿话题，促进AI的安全可持续发展。",
   icons: {
-    icon: '/favicon.svg', // 指向 public 目录下的 SVG 文件
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' }
+    ],
+    shortcut: ['/favicon.svg'],
   },
 };
 
