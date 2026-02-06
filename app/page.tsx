@@ -362,6 +362,9 @@ export default function HomePage() {
             <a href="https://www.tup.tsinghua.edu.cn/" target="_blank" className="group">
               <img src="/tup-logo.png" alt="清华大学出版社" className="h-12 md:h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
             </a>
+            <a href="https://www.thefungimind.com/" target="_blank" className="group">
+              <img src="/fungimind-logo.jpg" alt="Fungimind" className="h-12 md:h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
+            </a>
           </div>
         </div>
       </section>

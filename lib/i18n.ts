@@ -307,7 +307,7 @@ export const translations: Record<Language, Translations> = {
       title: '合作伙伴',
     },
     footer: {
-      copyright: '© 2025 Gixia. All rights reserved.',
+      copyright: '© 2026 Gixia. All rights reserved.',
     },
   },
   en: {
@@ -494,7 +494,7 @@ export const translations: Record<Language, Translations> = {
       title: 'Partners',
     },
     footer: {
-      copyright: '© 2025 Gixia. All rights reserved.',
+      copyright: '© 2026 Gixia. All rights reserved.',
     },
   },
 };
