@@ -312,13 +312,13 @@ export default function HomePage() {
         <p className="max-w-2xl mx-auto text-center mb-8 text-base md:text-lg">
           {t.about.description}
         </p>
-        {/* Adjust spacing for icons */}
-        <div className="flex justify-center gap-x-6 md:gap-x-8">
-          <a href="mailto:wjg172184@163.com" className="flex flex-col items-center">
+        {/* Adjust spacing for icons - use flex-wrap for mobile */}
+        <div className="flex flex-wrap justify-center gap-4 md:gap-x-6 md:gap-y-4">
+          <a href="mailto:wjg172184@163.com" className="flex flex-col items-center min-w-[80px]">
             <Mail className="h-8 w-8" />
             <span className="text-sm">{t.about.contact.email}</span>
           </a>
-          <div className="relative flex flex-col items-center cursor-pointer" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <div className="relative flex flex-col items-center cursor-pointer min-w-[80px]" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <MessageCircleMore className="h-8 w-8" />
             <span className="text-sm">{t.about.contact.wechat}</span>
             {showQRCode && (
@@ -328,23 +328,23 @@ export default function HomePage() {
               </div>
             )}
           </div>
-          <a href="https://www.zhihu.com/people/jingewang" target="_blank" className="flex flex-col items-center">
+          <a href="https://www.zhihu.com/people/jingewang" target="_blank" className="flex flex-col items-center min-w-[80px]">
             <Bookmark className="h-8 w-8" />
             <span className="text-sm">{t.about.contact.zhihu}</span>
           </a>
-          <a href="https://www.zhihu.com/ring/host/1911472389268676936" target="_blank" className="flex flex-col items-center">
+          <a href="https://www.zhihu.com/ring/host/1911472389268676936" target="_blank" className="flex flex-col items-center min-w-[80px]">
             <Target className="h-8 w-8" />
             <span className="text-sm">{t.about.contact.circle}</span>
           </a>
-          <a href="https://space.bilibili.com/69217382" target="_blank" className="flex flex-col items-center">
+          <a href="https://space.bilibili.com/69217382" target="_blank" className="flex flex-col items-center min-w-[80px]">
             <Youtube className="h-8 w-8" />
             <span className="text-sm">{t.about.contact.bilibili}</span>
           </a>
-          <a href="https://www.linkedin.com/company/aisafetystudy" target="_blank" className="flex flex-col items-center">
+          <a href="https://www.linkedin.com/company/aisafetystudy" target="_blank" className="flex flex-col items-center min-w-[80px]">
             <Linkedin className="h-8 w-8" />
             <span className="text-sm">{t.about.contact.linkedin}</span>
           </a>
-          <a href="https://github.com/gixia-org/aisafetystudy-doc" target="_blank" className="flex flex-col items-center">
+          <a href="https://github.com/gixia-org/aisafetystudy-doc" target="_blank" className="flex flex-col items-center min-w-[80px]">
             <Github className="h-8 w-8" />
             <span className="text-sm">{t.about.contact.github}</span>
           </a>
@@ -355,7 +355,7 @@ export default function HomePage() {
       <section className="px-4 md:px-8 py-12 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h3 className="text-2xl md:text-3xl font-semibold text-center mb-8">{t.partners.title}</h3>
-          <div className="flex justify-center items-center gap-12 md:gap-16">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12 lg:gap-16">
             <a href="https://according.work/" target="_blank" className="group">
               <img src="/accordingwork-logo.png" alt="According.Work" className="h-12 md:h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
             </a>
@@ -363,7 +363,7 @@ export default function HomePage() {
               <img src="/tup-logo.png" alt="清华大学出版社" className="h-12 md:h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
             </a>
             <a href="https://www.thefungimind.com/" target="_blank" className="group">
-              <img src="/fungimind-logo.jpg" alt="Fungimind" className="h-12 md:h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
+              <img src="/fungimind-logo.jpg" alt="Fungimind" className="h-20 md:h-32 object-contain group-hover:scale-105 transition-transform duration-300" />
             </a>
           </div>
         </div>
