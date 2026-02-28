@@ -88,6 +88,74 @@ async function fetchGitHubFile(path: string, signal?: AbortSignal): Promise<stri
   }
 }
 
+// 格式化日期为 YYYY/MM/DD 格式
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  
+  // 处理中文日期格式：2026 年 2 月 26 日 或 2026年2月26日
+  const chineseDateMatch = dateStr.match(/(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
+  if (chineseDateMatch) {
+    const year = chineseDateMatch[1];
+    const month = chineseDateMatch[2].padStart(2, '0');
+    const day = chineseDateMatch[3].padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  }
+  
+  // 处理 YYYY-MM-DD 格式
+  const dashDateMatch = dateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (dashDateMatch) {
+    const year = dashDateMatch[1];
+    const month = dashDateMatch[2].padStart(2, '0');
+    const day = dashDateMatch[3].padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  }
+  
+  // 处理 MM/DD/YYYY 格式
+  const slashDateMatch = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (slashDateMatch) {
+    const year = slashDateMatch[3];
+    const month = slashDateMatch[1].padStart(2, '0');
+    const day = slashDateMatch[2].padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  }
+  
+  // 如果无法解析，返回原字符串（去除空格）
+  return dateStr.replace(/\s+/g, '');
+}
+
+// 格式化时间为 HH:mm~HH:mm 格式
+function formatTime(timeStr: string): string {
+  if (!timeStr) return '';
+  
+  // 处理 HH:mm~HH:mm 或 HH:mm-HH:mm 格式（去除空格）
+  const rangeMatch = timeStr.match(/(\d{1,2})\s*:\s*(\d{2})\s*[~-]\s*(\d{1,2})\s*:\s*(\d{2})/);
+  if (rangeMatch) {
+    const startHour = rangeMatch[1].padStart(2, '0');
+    const startMin = rangeMatch[2];
+    const endHour = rangeMatch[3].padStart(2, '0');
+    const endMin = rangeMatch[4];
+    return `${startHour}:${startMin}~${endHour}:${endMin}`;
+  }
+  
+  // 处理单个时间 HH:mm（带或不带 AM/PM）
+  const singleTimeMatch = timeStr.match(/(\d{1,2})\s*:\s*(\d{2})(?:\s*([AP]M))?/i);
+  if (singleTimeMatch) {
+    let hour = parseInt(singleTimeMatch[1]);
+    const min = singleTimeMatch[2];
+    const ampm = singleTimeMatch[3]?.toUpperCase();
+    
+    // 处理 12 小时制
+    if (ampm === 'PM' && hour < 12) hour += 12;
+    if (ampm === 'AM' && hour === 12) hour = 0;
+    
+    const formattedHour = hour.toString().padStart(2, '0');
+    return `${formattedHour}:${min}`;
+  }
+  
+  // 如果无法解析，返回原字符串（去除空格）
+  return timeStr.replace(/\s+/g, '');
+}
+
 // 解析Markdown文件中的事件信息
 function parseEventFromMarkdown(content: string, filePath: string): GitHubEventData | null {
   try {
@@ -100,7 +168,7 @@ function parseEventFromMarkdown(content: string, filePath: string): GitHubEventD
     const datePatterns = [
       /\*\*日期\*\*[：:]\s*(.+)/i,
       /Date[：:]\s*(.+)/i,
-      /(\d{4}年\d{1,2}月\d{1,2}日)/,
+      /(\d{4}\s*年\s*\d{1,2}\s*月\s*\d{1,2}\s*日)/,
       /(\d{4}-\d{1,2}-\d{1,2})/,
       /(\d{1,2}\/\d{1,2}\/\d{4})/
     ];
@@ -108,7 +176,7 @@ function parseEventFromMarkdown(content: string, filePath: string): GitHubEventD
     for (const pattern of datePatterns) {
       const match = content.match(pattern);
       if (match) {
-        date = match[1].trim();
+        date = formatDate(match[1].trim());
         break;
       }
     }
@@ -125,7 +193,7 @@ function parseEventFromMarkdown(content: string, filePath: string): GitHubEventD
     for (const pattern of timePatterns) {
       const match = content.match(pattern);
       if (match) {
-        time = match[1].trim();
+        time = formatTime(match[1].trim());
         break;
       }
     }
@@ -133,7 +201,7 @@ function parseEventFromMarkdown(content: string, filePath: string): GitHubEventD
     // 改进的地点提取 - 优先查找腾讯会议号和链接
     let location = '线上';
 
-    // 查找腾讯会议链接和ID
+    // 查找腾讯会议链接和ID（但最终展示时只显示“腾讯会议”）
     const meetingLinkPatterns = [
       /\[腾讯会议\]\((https:\/\/meeting\.tencent\.com[^)]+)\)/i,
       /腾讯会议.*?(https:\/\/meeting\.tencent\.com[^\s\)]+)/i,
@@ -143,32 +211,31 @@ function parseEventFromMarkdown(content: string, filePath: string): GitHubEventD
     for (const pattern of meetingLinkPatterns) {
       const match = content.match(pattern);
       if (match) {
-        const meetingUrl = match[1] || match[0];
-        // 从URL中提取会议ID
-        const urlIdMatch = meetingUrl.match(/\/([a-zA-Z0-9]+)$/);
-        if (urlIdMatch) {
-          location = `腾讯会议 (${urlIdMatch[1]})`;
-        } else {
-          location = '腾讯会议';
-        }
+        // 无论是否能提取到会议ID，展示时统一用“腾讯会议”
+        location = '腾讯会议';
         break;
       }
     }
 
-    // 如果没有找到腾讯会议链接，查找会议ID
+    // 如果没有找到腾讯会议链接，查找会议ID（包括带连字符的形式，如 524-4055-7044）
     if (location === '线上') {
       const meetingIdPatterns = [
-        /腾讯会议.*?(\d{9,})/i,
-        /会议.*?ID.*?[：:]?\s*(\d{9,})/i,
-        /会议号.*?[：:]?\s*(\d{9,})/i,
-        /Meeting.*?ID.*?[：:]?\s*(\d{9,})/i
+        /腾讯会议.*?([\d\-]{9,})/i,
+        /会议.*?ID.*?[：:]?\s*([\d\-]{9,})/i,
+        /会议号.*?[：:]?\s*([\d\-]{9,})/i,
+        /Meeting.*?ID.*?[：:]?\s*([\d\-]{9,})/i
       ];
 
       for (const pattern of meetingIdPatterns) {
         const match = content.match(pattern);
         if (match) {
-          location = `腾讯会议 ${match[1]}`;
-          break;
+          // 提取出纯数字，兼容 524-4055-7044 这类格式
+          const digitsOnly = match[1].replace(/\D/g, '');
+          if (digitsOnly.length >= 9) {
+            // 只要能识别出腾讯会议号，展示时统一用“腾讯会议”
+            location = '腾讯会议';
+            break;
+          }
         }
       }
     }
@@ -215,8 +282,13 @@ function parseEventFromMarkdown(content: string, filePath: string): GitHubEventD
       content.match(/\[观看视频\]\((https?:\/\/[^)]+)\)/i) ||
       content.match(/\[B站\]\((https?:\/\/[^)]+)\)/i) ||
       content.match(/\[YouTube\]\((https?:\/\/[^)]+)\)/i) ||
-      content.match(/(https?:\/\/[^\s]+(?:bilibili|youtube|vimeo)[^\s]*)/i);
-    const videoLink = videoMatch ? videoMatch[1] : undefined;
+      content.match(/(https?:\/\/[^\s\)]+(?:bilibili|youtube|vimeo)[^\s\)]*)/i);
+    // 处理匹配结果：如果有捕获组用match[1]，否则用match[0]，并去除末尾的右括号
+    let videoLink: string | undefined = undefined;
+    if (videoMatch) {
+      const url = videoMatch[1] || videoMatch[0];
+      videoLink = url ? url.replace(/\)+$/, '') : undefined;
+    }
 
     // 根据文件路径确定事件类型
     let type: 'seminar' | 'lecture' | 'course' = 'lecture'; // 默认为讲座
@@ -396,7 +468,8 @@ export async function fetchAllEvents(signal?: AbortSignal): Promise<GitHubEventD
     events.sort((a, b) => {
       const convertChineseDate = (dateStr: string) => {
         if (!dateStr) return null;
-        const converted = dateStr.replace(/(\d{4})年(\d{1,2})月(\d{1,2})日/, '$1-$2-$3');
+        const normalized = dateStr.trim();
+        const converted = normalized.replace(/(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/, '$1-$2-$3');
         const date = new Date(converted);
         return isNaN(date.getTime()) ? null : date;
       };
