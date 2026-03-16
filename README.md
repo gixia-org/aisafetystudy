@@ -1,6 +1,6 @@
-# AI Safety Study Group
+# Open Community for AI Safety China
 
-AI Safety Study Group is a group of learners interested in AI Safety. We aim to explore the ethical, social, and technical challenges that arise when developing AI systems that can be used for harm. Check our [homepage](https://aisafetystudy.gixia.org/) to join the community.
+Open Community for AI Safety China is the largest AI safety open community in Chinese internet. We focus on AI risks, AI safety technologies and AI safety governance, aiming to promote the safe and sustainable development of AI. Check our [homepage](https://aisafetystudy.gixia.org/) to join the community.
 
 ### Build & Deploy
 
@@ -39,7 +39,7 @@ PORT=3000 pm2 start npm --name "aisafetystudy" -- run start
 #### Nginx Configuration
 Create `/etc/nginx/sites-available/react-apps`:
 ```nginx
-# AI Safety Study Group - aisafetystudy.gixia.org
+# Open Community for AI Safety China - aisafetystudy.gixia.org
 server {
     listen 80;
     server_name aisafetystudy.gixia.org;

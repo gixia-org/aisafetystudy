@@ -14,16 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI安全学习小组",
+  title: "AI安全开放社区",
   description: "关注AI对齐、伦理、评估、治理、可解释性等前沿话题，促进AI的安全可持续发展。",
-  keywords: ["AI安全", "AI对齐", "AI伦理", "AI治理", "机器学习安全", "人工智能安全", "人工智能伦理", "AI Safety", "AI Alignment", "AI Safety Study Group", "AI安全社区", "AI Safety社区", "AI安全社群"],
+  keywords: ["AI安全", "AI对齐", "AI伦理", "AI治理", "机器学习安全", "人工智能安全", "人工智能伦理", "AI Safety", "AI Alignment", "AI安全学习小组", "AI Safety Study Group", "AI安全开放社区", "Open Community for AI Safety China", "AI安全社区", "AI Safety社区", "AI安全社群", "AI安全共创计划", "中国", "China"],
   authors: [
-    { name: "AI安全学习小组" },
-    { name: "Gixia" },
-    { name: "AI安全共创计划" },
+    { name: "AI安全开放社区" },
   ],
-  creator: "AI安全学习小组",
-  publisher: "AI安全学习小组",
+  creator: "AI安全开放社区",
+  publisher: "AI安全开放社区",
   metadataBase: new URL('https://aisafetystudy.gixia.org'),
   alternates: {
     canonical: '/',
@@ -33,10 +31,10 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "AI安全学习小组",
-    description: "关注AI对齐、伦理、评估、治理、可解释性等前沿话题，促进AI的安全可持续发展。",
+    title: "AI安全开放社区",
+    description: "中文互联网最大的 AI 安全开放性社区，关注 AI 风险、AI 安全技术及 AI 安全治理等前沿话题，促进 AI 的安全可持续发展。",
     url: 'https://aisafetystudy.gixia.org',
-    siteName: 'AI Safety Study Group',
+    siteName: 'Open Community for AI Safety China',
     locale: 'zh_CN',
     type: 'website',
     images: [
@@ -44,13 +42,13 @@ export const metadata: Metadata = {
         url: '/logo.png',
         width: 1326,
         height: 453,
-        alt: 'AI安全学习小组',
+        alt: 'AI安全开放社区',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "AI安全学习小组",
+    title: "AI安全开放社区",
     description: "关注AI对齐、伦理、评估、治理、可解释性等前沿话题，促进AI的安全可持续发展。",
     images: ['/logo.png'],
   },
@@ -83,14 +81,14 @@ export default function RootLayout({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "AI安全学习小组",
-    "alternateName": "AI Safety Study Group",
+    "name": "AI安全开放社区",
+    "alternateName": "Open Community for AI Safety China",
     "url": "https://aisafetystudy.gixia.org",
     "logo": "https://aisafetystudy.gixia.org/logo.png",
     "description": "关注AI对齐、伦理、评估、治理、可解释性等前沿话题，促进AI的安全可持续发展。",
     "sameAs": [
       // Add social media links here
-      "https://github.com/gixia-org/aisafetystudy-doc",
+      "https://github.com/ocasc/doc",
       "https://www.linkedin.com/company/aisafetystudy"
     ],
     "contactPoint": {

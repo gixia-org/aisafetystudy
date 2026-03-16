@@ -48,7 +48,7 @@ export default function HomePage() {
             {/* Replace the book icon and text with logo image */}
             <img
               src="/logo.png"
-              alt="AI Safety Study Group"
+              alt="Open Community for AI Safety China"
               className="h-10 w-auto object-contain"
             />
           </div>
@@ -344,7 +344,7 @@ export default function HomePage() {
             <Linkedin className="h-8 w-8" />
             <span className="text-sm">{t.about.contact.linkedin}</span>
           </a>
-          <a href="https://github.com/gixia-org/aisafetystudy-doc" target="_blank" className="flex flex-col items-center min-w-[80px]">
+          <a href="https://github.com/ocasc/doc" target="_blank" className="flex flex-col items-center min-w-[80px]">
             <Github className="h-8 w-8" />
             <span className="text-sm">{t.about.contact.github}</span>
           </a>

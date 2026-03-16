@@ -6,7 +6,7 @@ on:
     - cron: '0 1 * * *'
   workflow_dispatch: # 允许手动触发
   push:
-    # 当aisafetystudy-doc仓库有新的Markdown文件时触发
+    # 当 ocasc/doc 仓库有新的 Markdown 文件时触发（需配置 repository_dispatch 或改用 schedule）
     paths:
       - 'talk-*.md'
       - 'seminars/*.md'

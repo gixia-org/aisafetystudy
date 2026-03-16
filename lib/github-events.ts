@@ -19,10 +19,9 @@ export interface GitHubEventData {
 
 // GitHub API 配置
 const GITHUB_CONFIG = {
-  owner: 'gixia-org',
-  repo: 'aisafetystudy-doc',
+  owner: 'ocasc',
+  repo: 'doc',
   apiBase: 'https://api.github.com',
-  // 注意：生产环境中应该使用环境变量来存储token
   token: process.env.GITHUB_TOKEN || '',
 };
 
