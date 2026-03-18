@@ -10,20 +10,22 @@ interface ResourceItem {
 
 interface ResourceCardProps {
     item: ResourceItem;
-    colorTheme?: 'blue' | 'green' | 'purple';
+    colorTheme?: 'blue' | 'green' | 'purple' | 'orange';
 }
 
 export function ResourceCard({ item, colorTheme = 'blue' }: ResourceCardProps) {
     const themeClasses = {
         blue: 'border-l-blue-500 hover:border-l-blue-600 group-hover:text-blue-600',
         green: 'border-l-green-500 hover:border-l-green-600 group-hover:text-green-600',
-        purple: 'border-l-purple-500 hover:border-l-purple-600 group-hover:text-purple-600'
+        purple: 'border-l-purple-500 hover:border-l-purple-600 group-hover:text-purple-600',
+        orange: 'border-l-orange-500 hover:border-l-orange-600 group-hover:text-orange-600'
     };
 
     const iconThemeClasses = {
         blue: 'group-hover:text-blue-500',
         green: 'group-hover:text-green-500',
-        purple: 'group-hover:text-purple-500'
+        purple: 'group-hover:text-purple-500',
+        orange: 'group-hover:text-orange-500'
     };
 
     return (

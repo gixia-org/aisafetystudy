@@ -78,6 +78,15 @@ export interface Translations {
           url: string;
         }>;
       };
+      seminars: {
+        title: string;
+        description: string;
+        items: Array<{
+          name: string;
+          description: string;
+          url: string;
+        }>;
+      };
     };
   };
 
@@ -215,6 +224,22 @@ export const translations: Record<Language, Translations> = {
               url: 'https://www.matsprogram.org/'
             }
           ]
+        },
+        seminars: {
+          title: '学术研讨会',
+          description: 'AI安全领域的定期研讨会和学术讲座',
+          items: [
+            {
+              name: 'BlueDot Reading Group',
+              description: 'BlueDot 主办的AI安全读书会，定期组织深度学习和讨论',
+              url: 'https://lu.ma/bluedotevents'
+            },
+            {
+              name: 'FAR AI Seminar',
+              description: 'FAR AI 举办的研讨会，聚焦 AI 安全研究的前沿进展',
+              url: 'https://www.far.ai/events/seminar'
+            }
+          ]
         }
       }
     },
@@ -343,6 +368,22 @@ export const translations: Record<Language, Translations> = {
               name: 'MATS',
               description: 'Machine Learning Alignment & Theory Scholars, training AI safety researchers',
               url: 'https://www.matsprogram.org/'
+            }
+          ]
+        },
+        seminars: {
+          title: 'Academic Seminars',
+          description: 'Regular seminars and academic talks in AI safety',
+          items: [
+            {
+              name: 'BlueDot Reading Group',
+              description: 'BlueDot-hosted AI safety reading groups with regular in-depth learning and discussions',
+              url: 'https://lu.ma/bluedotevents'
+            },
+            {
+              name: 'FAR AI Seminar',
+              description: 'FAR AI seminar series focusing on frontier AI safety research',
+              url: 'https://www.far.ai/events/seminar'
             }
           ]
         }
