@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Manrope, Inter } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/language-context";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -89,7 +91,7 @@ export default function RootLayout({
     "sameAs": [
       // Add social media links here
       "https://github.com/ocasc/doc",
-      "https://www.linkedin.com/company/aisafetystudy"
+      "https://www.linkedin.com/company/open-community-for-ai-safety-china"
     ],
     "contactPoint": {
       "@type": "ContactPoint",
@@ -101,7 +103,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${manrope.variable} ${inter.variable} antialiased font-body`}
       >
         <script
           type="application/ld+json"

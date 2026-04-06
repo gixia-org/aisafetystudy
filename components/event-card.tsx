@@ -1,9 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Calendar, Clock, MapPin, User, Play, FileText } from 'lucide-react';
+import { Calendar, Clock, MapPin, User, Play, FileText, ArrowRight } from 'lucide-react';
 
 interface EventCardProps {
   event: {
@@ -28,87 +26,75 @@ interface EventCardProps {
   };
 }
 
-export function EventCard({ event, translations }: EventCardProps) {
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'seminar':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'lecture':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'course':
-        return 'bg-purple-100 text-purple-800 border-purple-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
+const typeStyles: Record<string, { bg: string; label: string }> = {
+  lecture: { bg: 'bg-primary text-on-primary', label: '讲座' },
+  seminar: { bg: 'bg-tertiary text-on-tertiary', label: '研讨会' },
+  course: { bg: 'bg-outline text-white', label: '课程' },
+};
 
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'seminar':
-        return '🔬';
-      case 'lecture':
-        return '📚';
-      case 'course':
-        return '🎓';
-      default:
-        return '📅';
-    }
-  };
+export function EventCard({ event, translations }: EventCardProps) {
+  const style = typeStyles[event.type] || typeStyles.seminar;
 
   return (
-    <Card className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-l-4 border-l-blue-500 bg-gradient-to-br from-white to-gray-50">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-lg">{getTypeIcon(event.type)}</span>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getTypeColor(event.type)}`}>
-                {event.type === 'seminar' ? '研讨会' : event.type === 'course' ? '课程' : '讲座'}
-              </span>
-            </div>
-            <CardTitle className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
-              {event.title}
-            </CardTitle>
-          </div>
-        </div>
-      </CardHeader>
+    <div className="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:bg-surface-bright transition-all">
+      {/* Type color bar */}
+      <div className={`h-1.5 ${event.type === 'lecture' ? 'bg-primary' : event.type === 'seminar' ? 'bg-tertiary' : 'bg-outline'}`} />
 
-      <CardContent className="pt-0">
-        {/* Event Details */}
-        <div className="space-y-2 mb-4 p-3 bg-gray-50 rounded-lg">
-          {event.date && (
-            <div className="flex items-center gap-2 text-sm text-gray-700">
-              <Calendar className="h-4 w-4 text-blue-600" />
-              <span className="font-medium">{event.date}</span>
-            </div>
+      <div className="p-6 md:p-8">
+        {/* Badge row */}
+        <div className="flex items-center gap-3 mb-4">
+          <span className={`${style.bg} px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest`}>
+            {style.label}
+          </span>
+          {event.isUpcoming && (
+            <span className="bg-tertiary/10 text-tertiary px-2 py-0.5 rounded-md text-xs font-semibold">
+              Upcoming
+            </span>
           )}
+        </div>
+
+        {/* Date */}
+        {event.date && (
+          <div className="flex items-center gap-2 text-primary font-bold text-sm mb-3">
+            <Calendar className="h-4 w-4" />
+            {event.date}
+          </div>
+        )}
+
+        {/* Title */}
+        <h3 className="text-xl font-headline font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+          {event.title}
+        </h3>
+
+        {/* Meta info */}
+        <div className="space-y-1.5 mb-4">
           {event.time && (
-            <div className="flex items-center gap-2 text-sm text-gray-700">
-              <Clock className="h-4 w-4 text-green-600" />
-              <span className="font-medium">{event.time}</span>
+            <div className="flex items-center gap-2 text-sm text-on-surface-variant">
+              <Clock className="h-3.5 w-3.5" />
+              <span>{event.time}</span>
             </div>
           )}
           {event.location && (
-            <div className="flex items-center gap-2 text-sm text-gray-700">
-              <MapPin className="h-4 w-4 text-purple-600" />
-              <span className="font-medium">{event.location}</span>
+            <div className="flex items-center gap-2 text-sm text-on-surface-variant">
+              <MapPin className="h-3.5 w-3.5" />
+              <span>{event.location}</span>
             </div>
           )}
           {event.speaker && (
-            <div className="flex items-center gap-2 text-sm text-gray-700">
-              <User className="h-4 w-4 text-orange-600" />
-              <span className="font-medium">{event.speaker}</span>
+            <div className="flex items-center gap-2 text-sm text-on-surface-variant">
+              <User className="h-3.5 w-3.5" />
+              <span>{event.speaker}</span>
             </div>
           )}
         </div>
 
         {/* Tags */}
         {event.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-6">
             {event.tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-medium border border-blue-100"
+                className="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-xs rounded-lg font-medium"
               >
                 {tag}
               </span>
@@ -116,33 +102,39 @@ export function EventCard({ event, translations }: EventCardProps) {
           </div>
         )}
 
-        {/* Action Buttons */}
-        <div className="flex gap-2">
+        {/* Action Links */}
+        <div className="flex flex-wrap gap-4">
           {event.videoLink && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="flex items-center gap-1 text-xs flex-1"
-              onClick={() => window.open(event.videoLink, '_blank')}
+            <a
+              href={event.videoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all"
             >
-              <Play className="h-3 w-3" />
+              <Play className="h-4 w-4" />
               {translations.watchVideo}
-            </Button>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </a>
           )}
-
           {event.documentLink && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="flex items-center gap-1 text-xs flex-1"
-              onClick={() => window.open(event.documentLink, '_blank')}
+            <a
+              href={event.documentLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-tertiary font-bold text-sm hover:gap-3 transition-all"
             >
-              <FileText className="h-3 w-3" />
+              <FileText className="h-4 w-4" />
               {translations.viewDocument}
-            </Button>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </a>
+          )}
+          {!event.videoLink && !event.documentLink && event.isUpcoming && (
+            <span className="flex items-center gap-2 text-on-surface-variant text-sm font-medium">
+              {translations.comingSoon}
+            </span>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
