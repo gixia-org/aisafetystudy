@@ -48,9 +48,9 @@ interface StatsDisplayProps {
 }
 
 const rings = [
-  { size: 92, speed: 45, reverse: false, num: 10000, suffix: '+', key: 'reach'     as const, numSize: 'text-base md:text-lg',  color: 'text-primary',  labelColor: 'text-primary/70' },
-  { size: 66, speed: 30, reverse: true,  num: 200,   suffix: '+', key: 'community' as const, numSize: 'text-sm md:text-base',   color: 'text-primary',  labelColor: 'text-primary/70' },
-  { size: 40, speed: 20, reverse: false, num: 20,    suffix: '+', key: 'coreTeam'  as const, numSize: 'text-xs md:text-sm',     color: 'text-tertiary', labelColor: 'text-tertiary/70' },
+  { size: 92, speed: 45, reverse: false, num: 10000, suffix: '+', key: 'reach' as const, numSize: 'text-base md:text-lg', color: 'text-primary', labelColor: 'text-primary/70' },
+  { size: 66, speed: 30, reverse: true, num: 200, suffix: '+', key: 'community' as const, numSize: 'text-sm md:text-base', color: 'text-primary', labelColor: 'text-primary/70' },
+  { size: 40, speed: 20, reverse: false, num: 20, suffix: '+', key: 'coreTeam' as const, numSize: 'text-xs md:text-sm', color: 'text-tertiary', labelColor: 'text-tertiary/70' },
 ];
 
 export function HeroStats({ stats }: StatsDisplayProps) {
@@ -66,9 +66,8 @@ export function HeroStats({ stats }: StatsDisplayProps) {
             <div key={i} className="absolute" style={{ width: `${ring.size}%`, height: `${ring.size}%` }}>
               {/* Orbit track */}
               <div
-                className={`absolute inset-0 rounded-full border ${
-                  i === 0 ? 'border-primary/10' : i === 1 ? 'border-dashed border-primary/[0.08]' : 'border-tertiary/[0.08]'
-                }`}
+                className={`absolute inset-0 rounded-full border ${i === 0 ? 'border-primary/10' : i === 1 ? 'border-dashed border-primary/[0.08]' : 'border-tertiary/[0.08]'
+                  }`}
               />
 
               {/* Rotating wrapper — uses play-state to pause in place */}
