@@ -6,9 +6,9 @@ export interface StatItem {
 }
 
 export interface StatsData {
-  members: StatItem;
-  events: StatItem;
-  views: StatItem;
+  coreTeam: StatItem;
+  community: StatItem;
+  reach: StatItem;
 }
 
 export interface Translations {
@@ -152,9 +152,9 @@ export const translations: Record<Language, Translations> = {
       secondaryButton: '关于我们',
     },
     stats: {
-      members: { value: '200+', label: '社区成员' },
-      events: { value: '10+', label: '已举办活动' },
-      views: { value: '1000+', label: '视频播放量' },
+      coreTeam: { value: '20+', label: '核心共创' },
+      community: { value: '200+', label: '社区成员' },
+      reach: { value: '10,000+', label: '泛社区覆盖' },
     },
     events: {
       title: '活动',
@@ -271,7 +271,7 @@ export const translations: Record<Language, Translations> = {
   },
   en: {
     nav: {
-      siteName: 'OCASC',
+      siteName: 'Open Community for AI Safety China',
       events: 'Events',
       resources: 'Resources',
       joinAction: 'Join Us',
@@ -288,9 +288,9 @@ export const translations: Record<Language, Translations> = {
       secondaryButton: 'About Us',
     },
     stats: {
-      members: { value: '200+', label: 'Members' },
-      events: { value: '10+', label: 'Events Held' },
-      views: { value: '1000+', label: 'Video Views' },
+      coreTeam: { value: '20+', label: 'Core Team' },
+      community: { value: '200+', label: 'Community' },
+      reach: { value: '10,000+', label: 'Extended Reach' },
     },
     events: {
       title: 'Events',
@@ -394,7 +394,7 @@ export const translations: Record<Language, Translations> = {
       },
     },
     join: {
-      title: 'Join AI Safety Open Community',
+      title: 'Join Open Community for AI Safety China',
       description:
         'Fill out the form to join our community and receive the latest AI safety news and event updates.',
       button: 'Join Us',
