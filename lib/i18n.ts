@@ -295,7 +295,7 @@ export const translations: Record<Language, Translations> = {
     events: {
       title: 'Events',
       description:
-        'Stay updated with the latest workshops, technical seminars, and study groups',
+        'Stay updated with the latest lectures, technical seminars, and co-learning courses',
       allTypes: 'All',
       upcomingEvents: 'Upcoming Events',
       pastEvents: 'Past Events',
@@ -310,7 +310,7 @@ export const translations: Record<Language, Translations> = {
           description: 'Cutting-edge or popular science lectures',
         },
         course: {
-          title: 'Study Groups',
+          title: 'Courses',
           description: 'Learn courses together with other members',
         },
       },

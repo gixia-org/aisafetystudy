@@ -23,6 +23,7 @@ interface EventCardProps {
     viewDocument: string;
     registerNow: string;
     comingSoon: string;
+    typeLabels?: Record<string, string>;
   };
 }
 
@@ -34,6 +35,7 @@ const typeStyles: Record<string, { bg: string; label: string }> = {
 
 export function EventCard({ event, translations }: EventCardProps) {
   const style = typeStyles[event.type] || typeStyles.seminar;
+  const typeLabel = translations.typeLabels?.[event.type] || style.label;
 
   return (
     <div className="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:bg-surface-bright transition-all">
@@ -44,7 +46,7 @@ export function EventCard({ event, translations }: EventCardProps) {
         {/* Badge row */}
         <div className="flex items-center gap-3 mb-4">
           <span className={`${style.bg} px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest`}>
-            {style.label}
+            {typeLabel}
           </span>
           {event.isUpcoming && (
             <span className="bg-tertiary/10 text-tertiary px-2 py-0.5 rounded-md text-xs font-semibold">

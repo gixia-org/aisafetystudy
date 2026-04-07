@@ -190,6 +190,11 @@ export default function HomePage() {
                       viewDocument: t.events.viewDocument,
                       registerNow: t.events.registerNow,
                       comingSoon: t.events.comingSoon,
+                      typeLabels: {
+                        lecture: t.events.eventTypes.lecture.title,
+                        seminar: t.events.eventTypes.seminar.title,
+                        course: t.events.eventTypes.course.title,
+                      },
                     }}
                   />
                 ))}
