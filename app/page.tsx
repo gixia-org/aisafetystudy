@@ -1,397 +1,465 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { BookOpen, Video, GitPullRequest, Github, Linkedin, MessageCircleMore, Bookmark, Youtube, Target, Mail, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, ChevronUp, Mail, Tv, Linkedin, Github, ExternalLink, ArrowRight, Target } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { EventCard } from '@/components/event-card';
-import { ResourceCard } from '@/components/resource-card';
+import { HeroStats } from '@/components/hero-stats';
 import { useEvents } from '@/lib/use-events';
 import { NotificationBanner } from '@/components/notification-banner';
 
+const JOIN_FORM_URL = 'https://tally.so/r/2Ev9kj';
+
 export default function HomePage() {
-  const [showQRCode, setShowQRCode] = useState(false);
   const [showAllEvents, setShowAllEvents] = useState(false);
   const [selectedEventType, setSelectedEventType] = useState<'all' | 'seminar' | 'lecture' | 'course'>('all');
+  const [showComingSoon, setShowComingSoon] = useState(false);
   const { t } = useLanguage();
   const { events, loading, error, refresh } = useEvents();
 
-  const handleMouseEnter = () => {
-    setShowQRCode(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowQRCode(false);
-  };
+  useEffect(() => {
+    if (showComingSoon) {
+      const timer = setTimeout(() => setShowComingSoon(false), 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [showComingSoon]);
 
   const handleNavClick = (sectionId: string) => {
-    const headerHeight = document.querySelector('header')?.offsetHeight || 0;
     const section = document.getElementById(sectionId);
     if (section) {
+      const navHeight = 80;
       window.scrollTo({
-        top: section.offsetTop - headerHeight,
+        top: section.offsetTop - navHeight,
         behavior: 'smooth',
       });
     }
   };
 
+  // Filter and paginate events
+  const filteredEvents = (events || []).filter(
+    (event) => selectedEventType === 'all' || event.type === selectedEventType
+  );
+  const displayEvents = showAllEvents ? filteredEvents : filteredEvents.slice(0, 3);
+
   return (
-    // Add overflow-x-hidden to the main container to prevent horizontal scroll
-    <div className="min-h-screen bg-beige-50 text-gray-900 overflow-x-hidden">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+    <div className="min-h-screen bg-surface font-body text-on-surface overflow-x-hidden">
+      {/* ===== Top Navigation ===== */}
+      <nav className="fixed top-0 w-full z-50 glass-nav shadow-sm">
         <NotificationBanner />
-        <div className="px-4 md:px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            {/* Replace the book icon and text with logo image */}
-            <img
-              src="/logo.png"
-              alt="Open Community for AI Safety China"
-              className="h-10 w-auto object-contain"
-            />
+        <div className="flex justify-between items-center px-6 md:px-12 lg:px-16 py-4 max-w-6xl mx-auto">
+          {/* Logo / Site Name */}
+          <div className="flex items-center gap-1.5 text-lg md:text-xl font-bold tracking-tighter text-on-surface font-headline">
+            <img src="/logo.png" alt={t.nav.siteName} className="h-6 w-6 object-contain" />
+            {t.nav.siteName}
           </div>
-          {/* Adjust spacing for nav items */}
-          <nav className="flex items-center space-x-4 md:space-x-6">
-            {[t.nav.events, t.nav.resources, t.nav.about].map((item, index) => {
-              const sectionIds = ['event', 'resources', 'about'];
-              return (
-                <a
-                  key={item}
-                  href={`#${sectionIds[index]}`}
-                  // Adjust text size for smaller screens
-                  className="text-base md:text-lg hover:text-blue-600 flex-shrink-0"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(sectionIds[index]);
-                  }}
-                >
-                  {item}
-                </a>
-              );
-            })}
+
+          {/* Nav Links (desktop) */}
+          <div className="hidden md:flex gap-8 items-center font-headline tracking-tight font-semibold">
+            <a
+              href="#events"
+              onClick={(e) => { e.preventDefault(); handleNavClick('events'); }}
+              className="text-on-surface-variant hover:text-primary transition-colors"
+            >
+              {t.nav.events}
+            </a>
+            <a
+              href="#resources"
+              onClick={(e) => { e.preventDefault(); handleNavClick('resources'); }}
+              className="text-on-surface-variant hover:text-primary transition-colors"
+            >
+              {t.nav.resources}
+            </a>
+          </div>
+
+          {/* Right side: Language switcher + Join button */}
+          <div className="flex items-center gap-3 md:gap-6">
             <LanguageSwitcher />
-          </nav>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      {/* Adjust top padding to account for fixed header, adjust bottom padding */}
-      <section className="flex flex-col items-center text-center pt-72 pb-64 px-4">
-        {/* Adjust text size for smaller screens */}
-        <h2 className="text-3xl md:text-5xl font-extrabold mb-6 md:mb-8">
-          {t.hero.title}
-        </h2>
-        {/* Adjust text size and max-width */}
-        <p className="max-w-md md:max-w-xl text-base md:text-lg mb-8">
-          {t.hero.description}
-        </p>
-        {/* Modify this anchor tag */}
-        <a
-          href="#about"
-          onClick={(e) => {
-            e.preventDefault(); // Prevent default anchor jump
-            handleNavClick('about'); // Call the smooth scroll function
-          }}
-        >
-          <Button size="lg" className="px-8">{t.hero.joinButton}</Button>
-        </a>
-      </section>
-
-      {/* Events Section */}
-      <section id="event" className="px-4 md:px-16 lg:px-64 py-16 bg-white">
-        <h3 className="text-3xl font-semibold text-center mb-12">{t.events.title}</h3>
-
-        {/* Event Type Filter */}
-        <div className="flex justify-center mb-8">
-          <div className="flex gap-2 p-1 bg-gray-100 rounded-lg">
-            <button
-              onClick={() => setSelectedEventType('all')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'all'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-                }`}
+            <a
+              href={JOIN_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-gradient text-on-primary px-4 md:px-6 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition-all text-sm md:text-base cursor-pointer inline-block"
             >
-              {t.events.allTypes}
-            </button>
-            <button
-              onClick={() => setSelectedEventType('seminar')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'seminar'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-                }`}
-            >
-              {t.events.eventTypes.seminar.title}
-            </button>
-            <button
-              onClick={() => setSelectedEventType('lecture')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'lecture'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-                }`}
-            >
-              {t.events.eventTypes.lecture.title}
-            </button>
-            <button
-              onClick={() => setSelectedEventType('course')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedEventType === 'course'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-                }`}
-            >
-              {t.events.eventTypes.course.title}
-            </button>
+              {t.nav.joinAction}
+            </a>
           </div>
         </div>
+      </nav>
 
-        {/* Filter and display events */}
-        {(() => {
-          // 如果正在加载，显示加载状态
-          if (loading) {
-            return (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">正在从GitHub加载事件数据...</p>
+      <main className="pt-24">
+        {/* ===== Hero Section ===== */}
+        <section className="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 py-16 lg:py-24 grid lg:grid-cols-12 gap-12 items-center">
+          {/* Left: Text */}
+          <div className="lg:col-span-7">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary/10 text-tertiary text-sm font-semibold mb-6">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>
+              {t.hero.badge}
+            </div>
+            <h1 className="text-3xl md:text-4xl lg:text-[3.5rem] font-headline font-extrabold text-on-surface leading-[1.15] tracking-tight mb-8">
+              {t.hero.titlePrefix}
+              <span className="text-on-surface-variant/40 line-through decoration-2">{t.hero.titleStrikethrough}</span>
+              <span className="text-primary">{t.hero.titleHighlight}</span>
+              {t.hero.titleSuffix}
+            </h1>
+            <p className="text-base lg:text-lg text-on-surface-variant leading-relaxed max-w-xl mb-8">
+              {t.hero.description}
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <a href={JOIN_FORM_URL} target="_blank" rel="noopener noreferrer">
+                <button className="hero-gradient text-on-primary px-6 py-3 rounded-xl font-bold text-base shadow-lg hover:scale-105 transition-transform cursor-pointer">
+                  {t.hero.primaryButton}
+                </button>
+              </a>
+              <button
+                onClick={() => setShowComingSoon(true)}
+                className="bg-surface-container-high text-primary px-6 py-3 rounded-xl font-bold text-base hover:bg-surface-container-highest transition-colors cursor-pointer"
+              >
+                {t.hero.secondaryButton}
+              </button>
+            </div>
+          </div>
+
+          {/* Right: Community Stats */}
+          <div className="lg:col-span-5 relative">
+            <HeroStats stats={t.stats} />
+          </div>
+        </section>
+
+        {/* ===== Events Section ===== */}
+        <section id="events" className="bg-surface-container-low py-24">
+          <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-16">
+            {/* Header + Filters */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+              <div className="max-w-xl">
+                <h2 className="text-3xl font-headline font-bold text-on-surface mb-4">
+                  {t.events.title}
+                </h2>
+                <p className="text-on-surface-variant">{t.events.description}</p>
               </div>
-            );
-          }
-
-          // 如果加载出错，显示错误信息
-          if (error) {
-            return (
-              <div className="text-center py-12">
-                <p className="text-red-600 mb-4">加载事件数据失败: {error}</p>
-                <Button onClick={refresh} variant="outline">
-                  重试
-                </Button>
-              </div>
-            );
-          }
-
-          // 如果没有事件数据，显示空状态
-          if (!events || events.length === 0) {
-            return (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">暂无活动数据</p>
-                <Button onClick={refresh} variant="outline" className="mt-4">
-                  刷新数据
-                </Button>
-              </div>
-            );
-          }
-
-          // 过滤事件
-          const filteredEvents = events.filter(event =>
-            selectedEventType === 'all' || event.type === selectedEventType
-          );
-
-          // 默认显示前3个事件，如果选择显示全部则显示所有
-          const displayEvents = showAllEvents ? filteredEvents : filteredEvents.slice(0, 3);
-
-          return (
-            <>
-              {/* 事件列表 */}
-              {displayEvents.length > 0 && (
-                <div className="mb-12">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {displayEvents.map((event) => (
-                      <EventCard
-                        key={event.id}
-                        event={event}
-                        translations={{
-                          watchVideo: t.events.watchVideo,
-                          viewDocument: t.events.viewDocument,
-                          registerNow: t.events.registerNow,
-                          comingSoon: t.events.comingSoon,
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 显示更多/收起按钮 */}
-              {filteredEvents.length > 3 && (
-                <div className="text-center mb-8">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowAllEvents(!showAllEvents)}
-                    className="flex items-center gap-2"
+              <div className="flex gap-2 p-1.5 bg-surface-container-highest rounded-xl">
+                {(
+                  [
+                    { key: 'all', label: t.events.allTypes },
+                    { key: 'lecture', label: t.events.eventTypes.lecture.title },
+                    { key: 'seminar', label: t.events.eventTypes.seminar.title },
+                    { key: 'course', label: t.events.eventTypes.course.title },
+                  ] as const
+                ).map(({ key, label }) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setSelectedEventType(key);
+                      setShowAllEvents(false);
+                    }}
+                    className={`px-4 md:px-5 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${selectedEventType === key
+                      ? 'bg-surface-container-lowest text-primary shadow-sm font-bold'
+                      : 'text-on-surface-variant hover:text-on-surface'
+                      }`}
                   >
-                    {showAllEvents ? (
-                      <>
-                        <ChevronUp className="h-4 w-4" />
-                        {t.events.collapse}
-                      </>
-                    ) : (
-                      <>
-                        <ChevronDown className="h-4 w-4" />
-                        {t.events.viewMore}
-                      </>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Event Cards */}
+            {loading ? (
+              <div className="text-center py-16">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+                <p className="text-on-surface-variant">Loading events...</p>
+              </div>
+            ) : error ? (
+              <div className="text-center py-16">
+                <p className="text-destructive mb-4">{error}</p>
+                <button
+                  onClick={refresh}
+                  className="px-6 py-2 rounded-xl bg-surface-container-highest text-on-surface font-semibold hover:bg-surface-variant transition-colors cursor-pointer"
+                >
+                  Retry
+                </button>
+              </div>
+            ) : displayEvents.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayEvents.map((event) => (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    translations={{
+                      watchVideo: t.events.watchVideo,
+                      viewDocument: t.events.viewDocument,
+                      registerNow: t.events.registerNow,
+                      comingSoon: t.events.comingSoon,
+                      typeLabels: {
+                        lecture: t.events.eventTypes.lecture.title,
+                        seminar: t.events.eventTypes.seminar.title,
+                        course: t.events.eventTypes.course.title,
+                      },
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <p className="text-on-surface-variant text-lg">
+                  {selectedEventType === 'all'
+                    ? t.events.noEvents
+                    : t.events.noEventsOfType.replace(
+                      '{type}',
+                      t.events.eventTypes[selectedEventType].title
                     )}
-                  </Button>
-                </div>
-              )}
-
-              {/* No events message */}
-              {filteredEvents.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-gray-500 text-lg">
-                    {selectedEventType === 'all' ? t.events.noEvents : t.events.noEventsOfType.replace('{type}', t.events.eventTypes[selectedEventType].title)}
-                  </p>
-                </div>
-              )}
-            </>
-          );
-        })()}
-      </section>
-
-      {/* Resources Section */}
-      <section id="resources" className="px-4 md:px-8 py-16 bg-gray-50">
-        <h3 className="text-3xl font-semibold text-center mb-4">{t.resources.title}</h3>
-        <p className="text-center text-gray-600 mb-16 max-w-3xl mx-auto text-lg">
-          {t.resources.description}
-        </p>
-
-        <div className="max-w-7xl mx-auto space-y-20">
-          {/* Course Websites */}
-          <div>
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-4">
-                <BookOpen className="h-6 w-6 text-blue-600" />
+                </p>
               </div>
-              <h4 className="text-2xl font-bold mb-3 text-blue-700">{t.resources.categories.courses.title}</h4>
-              <p className="text-gray-600 max-w-2xl mx-auto">{t.resources.categories.courses.description}</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {t.resources.categories.courses.items.map((item, index) => (
-                <ResourceCard key={`course-${index}`} item={item} colorTheme="blue" />
-              ))}
-            </div>
-          </div>
+            )}
 
-          {/* Bloggers */}
-          <div>
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-4">
-                <Bookmark className="h-6 w-6 text-green-600" />
-              </div>
-              <h4 className="text-2xl font-bold mb-3 text-green-700">{t.resources.categories.bloggers.title}</h4>
-              <p className="text-gray-600 max-w-2xl mx-auto">{t.resources.categories.bloggers.description}</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {t.resources.categories.bloggers.items.map((item, index) => (
-                <ResourceCard key={`blogger-${index}`} item={item} colorTheme="green" />
-              ))}
-            </div>
-          </div>
-
-          {/* Research Projects */}
-          <div>
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full mb-4">
-                <Target className="h-6 w-6 text-purple-600" />
-              </div>
-              <h4 className="text-2xl font-bold mb-3 text-purple-700">{t.resources.categories.projects.title}</h4>
-              <p className="text-gray-600 max-w-2xl mx-auto">{t.resources.categories.projects.description}</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {t.resources.categories.projects.items.map((item, index) => (
-                <ResourceCard key={`project-${index}`} item={item} colorTheme="purple" />
-              ))}
-            </div>
-          </div>
-
-          {/* Academic Seminars */}
-          <div>
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-orange-100 rounded-full mb-4">
-                <BookOpen className="h-6 w-6 text-orange-600" />
-              </div>
-              <h4 className="text-2xl font-bold mb-3 text-orange-700">{t.resources.categories.seminars.title}</h4>
-              <p className="text-gray-600 max-w-2xl mx-auto">{t.resources.categories.seminars.description}</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {t.resources.categories.seminars.items.map((item, index) => (
-                <ResourceCard key={`seminar-${index}`} item={item} colorTheme="orange" />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      {/* Adjust padding for smaller screens */}
-      <section id="about" className="px-4 md:px-8 py-16 bg-white">
-        <h3 className="text-3xl font-semibold text-center mb-8">{t.about.title}</h3>
-        <p className="max-w-2xl mx-auto text-center mb-8 text-base md:text-lg">
-          {t.about.description}
-        </p>
-        {/* Adjust spacing for icons - use flex-wrap for mobile */}
-        <div className="flex flex-wrap justify-center gap-4 md:gap-x-6 md:gap-y-4">
-          <a href="mailto:wjg172184@163.com" className="flex flex-col items-center min-w-[80px]">
-            <Mail className="h-8 w-8" />
-            <span className="text-sm">{t.about.contact.email}</span>
-          </a>
-          <div className="relative flex flex-col items-center cursor-pointer min-w-[80px]" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <MessageCircleMore className="h-8 w-8" />
-            <span className="text-sm">{t.about.contact.wechat}</span>
-            {showQRCode && (
-              <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-white p-4 rounded-lg shadow-lg text-center w-48 md:w-64">
-                <img src="/qrcode.jpg" alt="QR Code" className="mb-2 w-full h-auto" />
-                <span>{t.about.qrCodeText}</span>
+            {/* Show More / Collapse */}
+            {filteredEvents.length > 3 && (
+              <div className="text-center mt-12">
+                <button
+                  onClick={() => setShowAllEvents(!showAllEvents)}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-surface-container-lowest text-primary font-bold shadow-sm hover:bg-surface-bright transition-colors cursor-pointer"
+                >
+                  {showAllEvents ? (
+                    <>
+                      <ChevronUp className="h-4 w-4" />
+                      {t.events.collapse}
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="h-4 w-4" />
+                      {t.events.viewMore}
+                    </>
+                  )}
+                </button>
               </div>
             )}
           </div>
-          <a href="https://www.zhihu.com/people/jingewang" target="_blank" className="flex flex-col items-center min-w-[80px]">
-            <Bookmark className="h-8 w-8" />
-            <span className="text-sm">{t.about.contact.zhihu}</span>
-          </a>
-          <a href="https://www.zhihu.com/ring/host/1911472389268676936" target="_blank" className="flex flex-col items-center min-w-[80px]">
-            <Target className="h-8 w-8" />
-            <span className="text-sm">{t.about.contact.circle}</span>
-          </a>
-          <a href="https://space.bilibili.com/69217382" target="_blank" className="flex flex-col items-center min-w-[80px]">
-            <Youtube className="h-8 w-8" />
-            <span className="text-sm">{t.about.contact.bilibili}</span>
-          </a>
-          <a href="https://www.linkedin.com/company/aisafetystudy" target="_blank" className="flex flex-col items-center min-w-[80px]">
-            <Linkedin className="h-8 w-8" />
-            <span className="text-sm">{t.about.contact.linkedin}</span>
-          </a>
-          <a href="https://github.com/ocasc/doc" target="_blank" className="flex flex-col items-center min-w-[80px]">
-            <Github className="h-8 w-8" />
-            <span className="text-sm">{t.about.contact.github}</span>
-          </a>
-        </div>
-      </section>
+        </section>
 
-      {/* Partners Section */}
-      <section className="px-4 md:px-8 py-12 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
-          <h3 className="text-2xl md:text-3xl font-semibold text-center mb-8">{t.partners.title}</h3>
-          <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12 lg:gap-16">
-            <a href="https://according.work/" target="_blank" className="group">
-              <img src="/accordingwork-logo.png" alt="According.Work" className="h-12 md:h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
-            </a>
-            <a href="https://www.tup.tsinghua.edu.cn/" target="_blank" className="group">
-              <img src="/tup-logo.png" alt="清华大学出版社" className="h-12 md:h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
-            </a>
-            <a href="https://www.thefungimind.com/" target="_blank" className="group">
-              <img src="/fungimind-logo.jpg" alt="Fungimind" className="h-20 md:h-32 object-contain group-hover:scale-105 transition-transform duration-300" />
-            </a>
+        {/* ===== Resources Section (Bento Grid) ===== */}
+        <section id="resources" className="py-24 max-w-6xl mx-auto px-6 md:px-12 lg:px-16">
+          <h2 className="text-3xl font-headline font-bold text-on-surface mb-4 text-center">
+            {t.resources.title}
+          </h2>
+          <p className="text-on-surface-variant text-center mb-12 max-w-2xl mx-auto">
+            {t.resources.description}
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:auto-rows-[280px]">
+            {/* Courses — Large Left Block */}
+            <div className="md:col-span-8 md:row-span-2 hero-gradient rounded-3xl p-8 md:p-10 text-on-primary flex flex-col relative overflow-hidden">
+              <div className="relative z-10 flex flex-col h-full">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl md:text-3xl font-headline font-bold leading-tight">
+                      {t.resources.categories.courses.title}
+                    </h3>
+                    <p className="text-sm opacity-70 mt-0.5">
+                      {t.resources.categories.courses.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
+                  {t.resources.categories.courses.items.map((item, i) => (
+                    <a
+                      key={i}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`flex flex-col justify-between bg-white/10 hover:bg-white/20 rounded-2xl p-5 transition-colors group ${i === 0 ? 'sm:row-span-2' : ''
+                        }`}
+                    >
+                      <div>
+                        <div className={`font-bold mb-2 ${i === 0 ? 'text-xl' : 'text-lg'}`}>{item.name}</div>
+                        <p className={`opacity-70 leading-relaxed ${i === 0 ? 'text-sm' : 'text-sm line-clamp-3'}`}>{item.description}</p>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-sm font-semibold mt-4 opacity-70 group-hover:opacity-100 transition-opacity">
+                        <span>Visit</span>
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+              {/* Decorative */}
+              <div className="absolute -right-20 -bottom-20 w-96 h-96 bg-primary-container rounded-full opacity-30 blur-3xl" />
+            </div>
+
+            {/* Research Projects — Top Right */}
+            <div className="md:col-span-4 bg-surface-container-highest rounded-3xl p-6 flex flex-col group">
+              <div className="flex items-center gap-3 mb-4">
+                <svg className="w-6 h-6 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                <h4 className="text-xl font-headline font-bold text-on-surface">
+                  {t.resources.categories.projects.title}
+                </h4>
+              </div>
+              <p className="text-sm text-on-surface-variant mb-3">
+                {t.resources.categories.projects.description}
+              </p>
+              <div className="space-y-2 flex-1">
+                {t.resources.categories.projects.items.map((item, i) => (
+                  <a
+                    key={i}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-high transition-colors"
+                  >
+                    <div className="min-w-0">
+                      <div className="font-semibold text-on-surface text-sm">{item.name}</div>
+                      <div className="text-xs text-on-surface-variant line-clamp-2">{item.description}</div>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-on-surface-variant flex-shrink-0 ml-2" />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Seminars — Bottom Right */}
+            <div className="md:col-span-4 bg-tertiary-container rounded-3xl p-6 text-on-tertiary-container flex flex-col">
+              <div className="flex items-center gap-3 mb-4">
+                <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                <h4 className="text-xl font-headline font-bold">
+                  {t.resources.categories.seminars.title}
+                </h4>
+              </div>
+              <p className="text-sm opacity-70 mb-3">
+                {t.resources.categories.seminars.description}
+              </p>
+              <div className="space-y-2 flex-1">
+                {t.resources.categories.seminars.items.map((item, i) => (
+                  <a
+                    key={i}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-colors"
+                  >
+                    <div className="min-w-0">
+                      <div className="font-semibold text-sm">{item.name}</div>
+                      <div className="text-xs opacity-70 line-clamp-2">{item.description}</div>
+                    </div>
+                    <ExternalLink className="h-4 w-4 opacity-50 flex-shrink-0 ml-2" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== Join CTA Section ===== */}
+        <section className="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 pb-24">
+          <div className="bg-surface-container rounded-[2rem] p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row items-center gap-8 md:gap-12 text-center lg:text-left">
+            <div className="flex-1">
+              <h2 className="text-2xl lg:text-3xl font-headline font-extrabold text-on-surface mb-4">
+                {t.join.title}
+              </h2>
+              <p className="text-on-surface-variant text-lg">{t.join.description}</p>
+            </div>
+            <div className="flex flex-col items-center gap-3">
+              <a href={JOIN_FORM_URL} target="_blank" rel="noopener noreferrer">
+                <button className="hero-gradient text-on-primary px-8 py-4 rounded-xl font-bold text-lg hover:scale-[0.98] transition-transform cursor-pointer">
+                  {t.join.button}
+                </button>
+              </a>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      {/* ===== Footer ===== */}
+      <footer className="bg-surface-container-low border-t border-outline/10">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-16">
+          {/* Top: About + Social */}
+          <div className="py-12 grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* About */}
+            <div>
+              <p className="text-on-surface-variant text-sm leading-relaxed max-w-md">
+                {t.about.description}
+              </p>
+            </div>
+            {/* Follow Us */}
+            <div className="md:text-right">
+              <h4 className="font-headline font-bold text-on-surface mb-4">{t.about.title}</h4>
+              <div className="flex flex-wrap gap-3 md:justify-end">
+                <a
+                  href="https://space.bilibili.com/1770030225"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  <Tv className="h-4 w-4" />
+                  <span>{t.about.contact.bilibili}</span>
+                </a>
+                <a
+                  href="https://www.zhihu.com/ring/host/1911472389268676936"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  <Target className="h-4 w-4" />
+                  <span>{t.about.contact.circle}</span>
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/open-community-for-ai-safety-china"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  <Linkedin className="h-4 w-4" />
+                  <span>{t.about.contact.linkedin}</span>
+                </a>
+                <a
+                  href="https://github.com/ocasc/doc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  <Github className="h-4 w-4" />
+                  <span>{t.about.contact.github}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Partners */}
+          <div className="py-6 border-t border-outline/10 flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+            <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider shrink-0">{t.partners.title}</span>
+            <div className="flex flex-wrap items-center gap-6">
+              <a href="https://according.work/" target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 transition-opacity">
+                <img src="/accordingwork-logo.png" alt="According.Work" className="h-6 object-contain" />
+              </a>
+              <a href="https://www.tup.tsinghua.edu.cn/" target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 transition-opacity">
+                <img src="/tup-logo.png" alt="清华大学出版社" className="h-6 object-contain" />
+              </a>
+              <a href="https://www.thefungimind.com/" target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 transition-opacity">
+                <img src="/fungimind-logo.jpg" alt="Fungimind" className="h-8 object-contain" />
+              </a>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="py-6 border-t border-outline/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-on-surface-variant">
+            <p>{t.footer.copyright}</p>
+            <a href="mailto:wjg172184@163.com" className="hover:text-primary transition-colors" aria-label="Email"><Mail className="h-4 w-4" /></a>
           </div>
         </div>
-      </section>
-
-      {/* Footer */}
-      {/* Adjust padding and text size */}
-      <footer className="bg-gray-100 py-6 md:py-8 px-4 md:px-8 mt-16">
-        <div className="flex flex-col md:flex-row justify-center items-center text-center">
-          <span className="text-xs md:text-sm text-gray-600">{t.footer.copyright}</span>
-        </div>
       </footer>
+
+      {/* Coming Soon Toast */}
+      <div
+        className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${showComingSoon ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+          }`}
+      >
+        <div className="bg-on-surface text-surface px-5 py-3 rounded-2xl shadow-lg text-sm font-medium flex items-center gap-2">
+          <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          Coming Soon
+        </div>
+      </div>
     </div>
   );
 }

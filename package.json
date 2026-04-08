@@ -1,6 +1,6 @@
 {
-  "name": "aisafetystudy",
-  "version": "0.3.0",
+  "name": "ocasc",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
