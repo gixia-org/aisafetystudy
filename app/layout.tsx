@@ -16,8 +16,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AI安全开放社区",
-  description: "关注AI对齐、伦理、评估、治理、可解释性等前沿话题，促进AI的安全可持续发展。",
+  title: "AI安全开放社区 | Open Community for AI Safety China",
+  description: "关注 AI 风险、AI 安全技术及 AI 安全治理等前沿话题，通过交流与合作促进 AI 的安全可持续发展。",
   keywords: ["AI安全", "AI对齐", "AI伦理", "AI治理", "机器学习安全", "人工智能安全", "人工智能伦理", "AI Safety", "AI Alignment", "AI安全学习小组", "AI Safety Study Group", "AI安全开放社区", "Open Community for AI Safety China", "AI安全社区", "AI Safety社区", "AI安全社群", "AI安全共创计划", "中国", "China"],
   authors: [
     { name: "AI安全开放社区" },
@@ -33,10 +33,10 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "AI安全开放社区",
-    description: "中文互联网最大的 AI 安全开放性社区，关注 AI 风险、AI 安全技术及 AI 安全治理等前沿话题，促进 AI 的安全可持续发展。",
+    title: "AI安全开放社区 | Open Community for AI Safety China",
+    description: "关注 AI 风险、AI 安全技术及 AI 安全治理等前沿话题，通过交流与合作促进 AI 的安全可持续发展。",
     url: 'https://aisafetystudy.gixia.org',
-    siteName: 'Open Community for AI Safety China',
+    siteName: 'OCASC',
     locale: 'zh_CN',
     type: 'website',
     images: [
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "AI安全开放社区",
-    description: "关注AI对齐、伦理、评估、治理、可解释性等前沿话题，促进AI的安全可持续发展。",
+    title: "AI安全开放社区 | Open Community for AI Safety China",
+    description: "关注 AI 风险、AI 安全技术及 AI 安全治理等前沿话题，通过交流与合作促进 AI 的安全可持续发展。",
     images: ['/logo.png'],
   },
   robots: {
@@ -67,9 +67,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' },
-      { url: '/favicon.png', type: 'image/png', sizes: '48x48' },
-      { url: '/favicon.ico', type: 'image/x-icon', sizes: '32x32' }
+      { url: '/favicon.ico', type: 'image/x-icon' }
     ],
     shortcut: ['/favicon.ico'],
   },
@@ -87,7 +85,7 @@ export default function RootLayout({
     "alternateName": "Open Community for AI Safety China",
     "url": "https://aisafetystudy.gixia.org",
     "logo": "https://aisafetystudy.gixia.org/logo.png",
-    "description": "关注AI对齐、伦理、评估、治理、可解释性等前沿话题，促进AI的安全可持续发展。",
+    "description": "关注 AI 风险、AI 安全技术及 AI 安全治理等前沿话题，通过交流与合作促进 AI 的安全可持续发展。",
     "sameAs": [
       // Add social media links here
       "https://github.com/ocasc/doc",
