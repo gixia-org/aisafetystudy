@@ -9,7 +9,7 @@ import { HeroStats } from '@/components/hero-stats';
 import { useEvents } from '@/lib/use-events';
 import { NotificationBanner } from '@/components/notification-banner';
 
-const JOIN_FORM_URL = 'https://tally.so/r/2Ev9kj';
+const JOIN_FORM_URL = 'https://docs.qq.com/form/page/DTXNGUmNiTmNnV016';
 
 export default function HomePage() {
   const [showAllEvents, setShowAllEvents] = useState(false);
