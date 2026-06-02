@@ -70,6 +70,12 @@ export default function HomePage() {
             >
               {t.nav.resources}
             </a>
+            <a
+              href="/about"
+              className="text-on-surface-variant hover:text-primary transition-colors"
+            >
+              {t.nav.about}
+            </a>
           </div>
 
           {/* Right side: Language switcher + Join button */}
@@ -111,12 +117,11 @@ export default function HomePage() {
                   {t.hero.primaryButton}
                 </button>
               </a>
-              <button
-                onClick={() => setShowComingSoon(true)}
-                className="bg-surface-container-high text-primary px-6 py-3 rounded-xl font-bold text-base hover:bg-surface-container-highest transition-colors cursor-pointer"
-              >
-                {t.hero.secondaryButton}
-              </button>
+              <a href="/about">
+                <button className="bg-surface-container-high text-primary px-6 py-3 rounded-xl font-bold text-base hover:bg-surface-container-highest transition-colors cursor-pointer">
+                  {t.hero.secondaryButton}
+                </button>
+              </a>
             </div>
           </div>
 
