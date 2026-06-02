@@ -80,6 +80,7 @@ export interface Translations {
           name: string;
           description: string;
           url: string;
+          badge?: string;
         }>;
       };
       projects: {
@@ -231,6 +232,12 @@ export const translations: Record<Language, Translations> = {
           title: '课程资源',
           description: '优质的AI安全在线学习平台',
           items: [
+            {
+              name: '前沿AI安全课程',
+              description: 'OCASC 将 BlueDot Impact 的 AI 安全课程带入中文世界。覆盖 AGI 战略、技术安全与前沿治理，7月5日开课，第一期免费，名额有限。',
+              url: 'https://mp.weixin.qq.com/s/Eca3ROQZ4_1ub1x4Nzl_vA',
+              badge: '新',
+            },
             {
               name: 'BlueDot',
               description: '专业的AI安全教育平台，提供系统性的课程内容',
@@ -427,6 +434,12 @@ export const translations: Record<Language, Translations> = {
           title: 'Course Resources',
           description: 'High-quality online AI safety learning platforms',
           items: [
+            {
+              name: 'AI Safety Course',
+              description: 'OCASC brings the BlueDot Impact AI safety curriculum to the Chinese-speaking world. Covering AGI strategy, technical safety & frontier governance. Starts July 5, first cohort is free, limited spots.',
+              url: 'https://mp.weixin.qq.com/s/Eca3ROQZ4_1ub1x4Nzl_vA',
+              badge: 'NEW',
+            },
             {
               name: 'BlueDot',
               description:
