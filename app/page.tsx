@@ -523,7 +523,7 @@ export default function HomePage() {
           >
             <h3 className="text-base font-bold text-gray-800">OCASC 微信公众号</h3>
             <img
-              src="/OCASC公众号.png"
+              src="/ocasc-qrcode.png"
               alt="OCASC微信公众号二维码"
               className="w-56 h-56 object-contain rounded-xl"
             />
