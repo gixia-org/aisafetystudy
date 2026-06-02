@@ -495,7 +495,7 @@ export default function HomePage() {
           {/* Copyright */}
           <div className="py-6 border-t border-outline/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-on-surface-variant">
             <p>{t.footer.copyright}</p>
-            <a href="mailto:wjg172184@163.com" className="hover:text-primary transition-colors" aria-label="Email"><Mail className="h-4 w-4" /></a>
+            <a href="mailto:sarah.sun@aisafety-cn.com" className="hover:text-primary transition-colors" aria-label="Email"><Mail className="h-4 w-4" /></a>
           </div>
         </div>
       </footer>
